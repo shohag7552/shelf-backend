@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dotenv/dotenv.dart';
+import 'package:my_shelf_mysql_app/data_source/mysql_connection.dart';
 import 'package:mysql_client/mysql_client.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
@@ -14,21 +16,139 @@ import 'package:mysql1/mysql1.dart';
 //       ..get('/echo/<message>', _echoHandler)
 //       ..post(, handler);
 
-Response _rootHandler(Request req) {
-  return Response.ok('Hello, World!\n');
+// Response _rootHandler(Request req) {
+//   return Response.ok('Hello, World!\n');
+// }
+//
+// Response _echoHandler(Request request) {
+//   final message = request.params['message'];
+//   return Response.ok('$message\n');
+// }
+
+Future<Response> _getUsersHandler(Request request) async {
+  try {
+    final connection = await MySQLDatabase.getConnection();
+    final result = await connection.execute('SELECT id, name, email FROM names');
+
+    final users = result.rows.map((row) {
+      final data = row.assoc();
+      return {
+        'id': data['id'],
+        'name': data['name'],
+        'email': data['email'],
+      };
+    }).toList();
+
+    return Response.ok(
+      json.encode(users),
+      headers: {'Content-Type': 'application/json'},
+    );
+  } catch (e) {
+    print('Error fetching users: $e');
+    return Response.internalServerError(
+      body: json.encode({'error': 'Failed to fetch users'}),
+      headers: {'Content-Type': 'application/json'},
+    );
+  }
 }
 
-Response _echoHandler(Request request) {
-  final message = request.params['message'];
-  return Response.ok('$message\n');
+Future<Response> _createUsersHandler(Request request) async {
+  try {
+    final body = await request.readAsString();
+    print('====body: $body');
+    final data = json.decode(body) as Map<String, dynamic>;
+    final name = data['name'] as String?;
+    final email = data['email'] as String?;
+
+    if (name == null || email == null) {
+      return Response.badRequest(
+        body: json.encode({'error': 'Name and email are required'}),
+        headers: {'Content-Type': 'application/json'},
+      );
+    }
+
+    final connection = await MySQLDatabase.getConnection();
+    final result = await connection.execute(
+      'INSERT INTO names (id, name, email) VALUES (:id, :name, :email)',
+      {'id': '3', 'name': name, 'email': email},
+    ).timeout(Duration(seconds: 10));
+    // final result2 = await connection.prepare(
+    //   'CREATE TABLE IF NOT EXISTS products ('
+    //       'id INT AUTO_INCREMENT PRIMARY KEY,'
+    //       ' name VARCHAR(255) NOT NULL,'
+    //       'price DECIMAL(10, 2) NOT NULL,'
+    //       'description TEXT,'
+    //       'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)'
+    // ).timeout(Duration(seconds: 10));
+    // CREATE TABLE IF NOT EXISTS products (
+//             id INT AUTO_INCREMENT PRIMARY KEY,
+//             name VARCHAR(255) NOT NULL,
+//             price DECIMAL(10, 2) NOT NULL,
+//             description TEXT,
+//             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+//         );
+
+    print('======last id: ${result.lastInsertID} =====');
+    return Response.ok(
+      json.encode({'message': 'User created successfully', 'id': result.lastInsertID}),
+      headers: {'Content-Type': 'application/json'},
+    );
+    // return Response.created(
+    //   '/users/${result.lastInsertID}', // Example location header
+    //   body: json.encode({'message': 'User created successfully', 'id': result.lastInsertID}),
+    //   headers: {'Content-Type': 'application/json'},
+    // );
+  } catch (e) {
+    print('Error creating user: $e');
+    return Response.internalServerError(
+      body: json.encode({'error': 'Failed to create user'}),
+      headers: {'Content-Type': 'application/json'},
+    );
+  }
 }
-
-
 
 void main(List<String> args) async {
+
+  DotEnv()..load();
+
+  final ip = InternetAddress.anyIPv4;
+// Create a Router
+  final _router = Router();
+
+  // Define routes
+  _router.get('/users', _getUsersHandler);
+  _router.post('/users', _createUsersHandler);
+
+  // A simple handler for the root path
+  _router.get('/', (Request request) {
+    return Response.ok('Welcome to the Shelf MySQL App!');
+  });
+
+  // A basic handler for unknown routes
+  _router.all('/<ignored|.*>', (Request request) {
+    return Response.notFound('Not Found');
+  });
+
+  // Combine multiple handlers into a pipeline.
+  // Log requests and errors
+  final handler = Pipeline()
+      .addMiddleware(logRequests())
+      .addHandler(_router);
+
+  final port = int.parse(Platform.environment['PORT'] ?? '8080');
+  final server = await serve(handler, ip, port); // Listen on all interfaces
+  print('Serving at http://${server.address.host}:${server.port}');
+
+  // Ensure connection is closed when the server shuts down
+  ProcessSignal.sigint.watch().listen((_) {
+    MySQLDatabase.closeConnection();
+    server.close(force: true);
+    exit(0);
+  });
+
   // load();
   // Use any available host or container IP (usually `0.0.0.0`).
-  final ip = InternetAddress.anyIPv4;
+  // final ip = InternetAddress.anyIPv4;
 
   // final dbSettings = ConnectionSettings(
   //     host: 'localhost',//127.0.0.1,
@@ -47,21 +167,21 @@ void main(List<String> args) async {
   //   maxConnections: 10,
   //   databaseName: 'users', // optional,
   // );
-  final conn = await MySQLConnection.createConnection(
-    host: "localhost",
-    port: 8889,
-    userName: "root",
-    password: "root",
-    databaseName: "users", // optional
-  );
+  // final conn = await MySQLConnection.createConnection(
+  //   host: "localhost",
+  //   port: 8889,
+  //   userName: "root",
+  //   password: "root",
+  //   databaseName: "users", // optional
+  // );
 
 // actually connect to database
-  await conn.connect();
-  var result = await conn.execute("SELECT * FROM names WHERE id = :id", {"id": 1});
-
-  for (final row in result.rows) {
-    print(row.assoc());
-  }
+//   await conn.connect();
+//   var result = await conn.execute("SELECT * FROM names WHERE id = :id", {"id": 1});
+//
+//   for (final row in result.rows) {
+//     print(row.assoc());
+//   }
   // var settings = new ConnectionSettings(
   //     host: 'localhost',
   //     port: 8889,
