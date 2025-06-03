@@ -3,11 +3,15 @@ import 'dart:io';
 
 import 'package:dotenv/dotenv.dart';
 import 'package:my_shelf_mysql_app/data_source/mysql_connection.dart';
+import 'package:my_shelf_mysql_app/middleware/db_middleware.dart';
+import 'package:my_shelf_mysql_app/routes/user_routes.dart';
+import 'package:my_shelf_mysql_app/src/generated/prisma_client/client.dart';
 import 'package:mysql_client/mysql_client.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:mysql1/mysql1.dart';
+
 
 // Configure routes.
 // final _router =
@@ -112,6 +116,44 @@ void main(List<String> args) async {
 
   DotEnv()..load();
 
+  // Initialize the PrismaClient (it will manage its own connections)
+  // Ensure this is done once at startup.
+  final prisma = PrismaClient();
+
+  // Create a main router
+  final router = Router();
+
+  // Mount your user routes and post routes
+  router.mount('/api', getUserRouter().call);
+  // router.mount('/api', getPostRouter().call); // Mount the post router
+
+  // Add a simple root handler
+  router.get('/', (Request request) {
+    return Response.ok('Hello, Shelf with MySQL and ORM!');
+  });
+
+  // Create a pipeline for middleware and the router
+  final handler = Pipeline()
+      .addMiddleware(logRequests())
+      .addMiddleware(providePrismaClient()) // This middleware injects the `prisma` client
+      // .addMiddleware(handleCors())
+      .addHandler(router);
+
+  final ip = InternetAddress.anyIPv4;
+  final port = int.parse(Platform.environment['PORT'] ?? '8080');
+
+  final server = await serve(handler, ip, port);
+
+  print('Serving at http://${server.address.host}:${server.port}');
+
+  // Graceful shutdown
+  ProcessSignal.sigint.watch().listen((_) async {
+    print('Shutting down server...');
+    await server.close();
+    await prisma.$disconnect(); // Disconnect PrismaClient on shutdown
+    exit(0);
+  });
+/*
   final ip = InternetAddress.anyIPv4;
 // Create a Router
   final _router = Router();
@@ -145,7 +187,12 @@ void main(List<String> args) async {
     MySQLDatabase.closeConnection();
     server.close(force: true);
     exit(0);
-  });
+  });*/
+
+
+
+
+
 
   // load();
   // Use any available host or container IP (usually `0.0.0.0`).

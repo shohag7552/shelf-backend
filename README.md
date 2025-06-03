@@ -3,6 +3,30 @@ configured to enable running with [Docker](https://www.docker.com/).
 
 This sample code handles HTTP GET requests to `/` and `/echo/<message>`
 
+
+## Step 1
+ * just create a dart project for setup [shelf] backend. Which is use for create server response system. 
+ * Then I integrate [shelf route]. which is use for generate route {http://localhost.8080/user} .
+
+## Step 2
+ * Setup [mysql1] for using mysql database. 
+ * Use [dotenv] for setup the database location, port, name, password etc.
+
+## Step 3
+ * Use [orm] for database queries or curd operation.
+   * Need to add [{prisma/schema.prisma}] file, which contains -
+     - db (database type- mysql, postgresql, sqlite, mongodb)
+     - clint (Specifies that the Dart client will be generated)
+   * You can  add model there.
+   * After setup these, need to run [npx prisma generate] for generating client and models.
+   * after generate you can migrate [npx prisma migrate dev] then database will updated with new table.
+
+
+
+## ================== **** ===================
+
+
+
 # Running the sample
 
 ## Running with the Dart SDK

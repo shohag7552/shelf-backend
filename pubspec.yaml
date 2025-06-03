@@ -12,6 +12,7 @@ dependencies:
   mysql1: ^0.20.0
   mysql_client: ^0.0.27
   dotenv: ^4.2.0
+  orm: ^5.3.3
 #  shelf_body_parser: ^1.1.2 # To parse JSON or form data from requests
 #  mysql1: ^0.20.0 # The MySQL client library
   # Optional for logging
