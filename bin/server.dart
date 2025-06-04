@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dotenv/dotenv.dart';
+import 'package:my_shelf_mysql_app/api/v1/api_routers.dart';
 import 'package:my_shelf_mysql_app/data_source/mysql_connection.dart';
 import 'package:my_shelf_mysql_app/middleware/db_middleware.dart';
 import 'package:my_shelf_mysql_app/routes/user_routes.dart';
@@ -10,107 +11,7 @@ import 'package:my_shelf_mysql_app/src/generated/prisma_client/client.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';
-// import 'package:mysql1/mysql1.dart';
 
-
-// Configure routes.
-// final _router =
-//     Router()
-//       ..get('/', _rootHandler)
-//       ..get('/echo/<message>', _echoHandler)
-//       ..post(, handler);
-
-
-// Response _rootHandler(Request req) {
-//   return Response.ok('Hello, World!\n');
-// }
-//
-// Response _echoHandler(Request request) {
-//   final message = request.params['message'];
-//   return Response.ok('$message\n');
-// }
-//
-// Future<Response> _getUsersHandler(Request request) async {
-//   try {
-//     final connection = await MySQLDatabase.getConnection();
-//     final result = await connection.execute('SELECT id, name, email FROM names');
-//
-//     final users = result.rows.map((row) {
-//       final data = row.assoc();
-//       return {
-//         'id': data['id'],
-//         'name': data['name'],
-//         'email': data['email'],
-//       };
-//     }).toList();
-//
-//     return Response.ok(
-//       json.encode(users),
-//       headers: {'Content-Type': 'application/json'},
-//     );
-//   } catch (e) {
-//     print('Error fetching users: $e');
-//     return Response.internalServerError(
-//       body: json.encode({'error': 'Failed to fetch users'}),
-//       headers: {'Content-Type': 'application/json'},
-//     );
-//   }
-// }
-//
-// Future<Response> _createUsersHandler(Request request) async {
-//   try {
-//     final body = await request.readAsString();
-//     print('====body: $body');
-//     final data = json.decode(body) as Map<String, dynamic>;
-//     final name = data['name'] as String?;
-//     final email = data['email'] as String?;
-//
-//     if (name == null || email == null) {
-//       return Response.badRequest(
-//         body: json.encode({'error': 'Name and email are required'}),
-//         headers: {'Content-Type': 'application/json'},
-//       );
-//     }
-//
-//     final connection = await MySQLDatabase.getConnection();
-//     final result = await connection.execute(
-//       'INSERT INTO names (id, name, email) VALUES (:id, :name, :email)',
-//       {'id': '3', 'name': name, 'email': email},
-//     ).timeout(Duration(seconds: 10));
-//     // final result2 = await connection.prepare(
-//     //   'CREATE TABLE IF NOT EXISTS products ('
-//     //       'id INT AUTO_INCREMENT PRIMARY KEY,'
-//     //       ' name VARCHAR(255) NOT NULL,'
-//     //       'price DECIMAL(10, 2) NOT NULL,'
-//     //       'description TEXT,'
-//     //       'created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)'
-//     // ).timeout(Duration(seconds: 10));
-//     // CREATE TABLE IF NOT EXISTS products (
-// //             id INT AUTO_INCREMENT PRIMARY KEY,
-// //             name VARCHAR(255) NOT NULL,
-// //             price DECIMAL(10, 2) NOT NULL,
-// //             description TEXT,
-// //             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-// //         );
-//
-//     print('======last id: ${result.lastInsertID} =====');
-//     return Response.ok(
-//       json.encode({'message': 'User created successfully', 'id': result.lastInsertID}),
-//       headers: {'Content-Type': 'application/json'},
-//     );
-//     // return Response.created(
-//     //   '/users/${result.lastInsertID}', // Example location header
-//     //   body: json.encode({'message': 'User created successfully', 'id': result.lastInsertID}),
-//     //   headers: {'Content-Type': 'application/json'},
-//     // );
-//   } catch (e) {
-//     print('Error creating user: $e');
-//     return Response.internalServerError(
-//       body: json.encode({'error': 'Failed to create user'}),
-//       headers: {'Content-Type': 'application/json'},
-//     );
-//   }
-// }
 
 void main(List<String> args) async {
 
@@ -120,24 +21,12 @@ void main(List<String> args) async {
   // Ensure this is done once at startup.
   final prisma = PrismaClient();
 
-  // Create a main router
-  final router = Router();
-
-  // Mount your user routes and post routes
-  router.mount('/api', getUserRouter().call);
-  // router.mount('/api', getPostRouter().call); // Mount the post router
-
-  // Add a simple root handler
-  router.get('/', (Request request) {
-    return Response.ok('Hello, Shelf with MySQL and ORM!');
-  });
-
   // Create a pipeline for middleware and the router
   final handler = Pipeline()
       .addMiddleware(logRequests())
       .addMiddleware(providePrismaClient()) // This middleware injects the `prisma` client
       // .addMiddleware(handleCors())
-      .addHandler(router.call);
+      .addHandler(createRouter().call);
 
   final ip = InternetAddress.anyIPv4;
   final port = int.parse(Platform.environment['PORT'] ?? '8080');
@@ -153,6 +42,8 @@ void main(List<String> args) async {
     await prisma.$disconnect(); // Disconnect PrismaClient on shutdown
     exit(0);
   });
+
+
 /*
   final ip = InternetAddress.anyIPv4;
 // Create a Router
