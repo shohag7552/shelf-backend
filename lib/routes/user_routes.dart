@@ -21,10 +21,10 @@ Router getUserRouter() {
   router.get('/user/<id>', _fetchUsersById);
 
   ///Update user by ID or unique field
-  router.put('/update-user/<id>', _updateUser);
+  router.put('/update_user/<id>', _updateUser);
 
   ///Delete user by ID or unique field
-  router.delete('/delete-user/<id>', _deleteUser);
+  router.delete('/delete_user/<id>', _deleteUser);
   //
   // router.get('/users/<userId>/posts/<postId>', (Request request, String userId, String postId) {
   //   return Response.ok('Fetching post $postId for user $userId');
@@ -99,13 +99,13 @@ Future<Response> _fetchUsersById(Request request, String id) async {
   }
 }
 
+///here can't duplicate as it's unique
 Future<Response> _updateUser(Request request, String id) async {
   // final prisma = getPrismaClient(request);
   final client = request.context['prisma'] as PrismaClient;
 
   try {
     final userId = int.tryParse(id);
-    print('=========ggg===> $userId');
     if (userId == null) {
       return Response.badRequest(body: jsonEncode({'error': 'Invalid user ID'}));
     }
@@ -128,24 +128,14 @@ Future<Response> _updateUser(Request request, String id) async {
           email: PrismaUnion.$1(email ??''),
         )
       ) ,
-      // data: UserUpdateInput(
-      //   name: name != null ? StringFieldUpdateOperationsInput(set: name) : null,
-      //   email: email != null ? NullableStringFieldUpdateOperationsInput(set: email) : null,
-      // ),
-      // where: UserWhereUniqueInput(id: userId),
-      // data: PrismaUnion.$2(
-      //   UserUncheckedUpdateInput(
-      //     name: PrismaUnion.$1(name??''),
-      //     email: PrismaUnion.$(email??''),
-      //   ),
-      // ),
-      // data: PrismaUnion.$1(UserUpdateInput(
-      //   email: PrismaUnion.$1(email??''),
-      //   name: PrismaUnion.$1(name??''),
-      // )),
     );
-
     return Response.ok(jsonEncode(updatedUser?.toJson()), headers: {'Content-Type': 'application/json'});
+  } on PrismaClientKnownRequestError catch (e) {
+    if (e.code == 'P2025') { // Not Found
+      return Response.notFound(jsonEncode({'error': 'Post not found for update'}));
+    }
+    print('Prisma error updating post: ${e.code} - ${e.message}');
+    return Response.internalServerError(body: jsonEncode({'error': 'Database error', 'message': e.message}));
   } catch (e) {
     print('Error updating user: $e');
     return Response.internalServerError(body: jsonEncode({'error': 'Failed to update user'}));
