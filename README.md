@@ -48,11 +48,15 @@ This sample code handles HTTP GET requests to `/` and `/echo/<message>`
    * You can  add model there.
    * After setup these, need to run {npx prisma generate} for generating client and models.
    ```
-    npx prisma generate
+   npx prisma generate
+   or
+   dart run orm generate
    ``` 
    * after generate you can migrate {npx prisma migrate dev} then database will updated with new table.
     ```
    npx prisma migrate dev
+   or
+   npx prisma migrate dev --name your_added_field
    ```
 
 

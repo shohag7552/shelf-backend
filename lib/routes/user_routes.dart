@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:my_shelf_mysql_app/src/generated/prisma_client/client.dart';
 import 'package:my_shelf_mysql_app/src/generated/prisma_client/prisma.dart';
 import 'package:shelf/shelf.dart';
+import 'package:shelf_multipart/shelf_multipart.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:orm/orm.dart'; // Import your Prisma client
 
@@ -10,6 +12,9 @@ Router getUserRouter() {
 
   /// Create a new user
   router.post('/users', _createUser);
+
+  /// Create a new user
+  router.post('/image', _imageUploadUser);
 
   ///Fetch all users
   router.get('/users', _fetchUsers);
@@ -179,4 +184,87 @@ Future<Response> _deleteUser(Request request, String id) async {
   }
 
 }
+
+Future<Response> _imageUploadUser(Request request) async {
+  // final prisma = getPrismaClient(request);
+  final client = request.context['prisma'] as PrismaClient;
+
+  if (request.multipart() case var multipart?) {
+    final description = StringBuffer('Regular multipart request\n');
+    // final multipart = request.multipart()?.parts;
+    // await for (final part in multipart) {
+    //   // Headers are available through part.headers as a map:
+    //   final headers = part.headers;
+    //   // part implements the `Stream<List<int>>` interface which can be used to
+    //   // read data. You can also use `part.readBytes()` or `part.readString()`
+    // }
+    //
+    // await for (final part in multipart.parts) {
+    //   description.writeln('new part');
+    //
+    //   part.headers
+    //       .forEach((key, value) => description.writeln('Header $key=$value'));
+    //   final content = await part.readString();
+    //   description.writeln('content: $content');
+    //
+    //   description.writeln('end of part');
+    // }
+    //
+    // return Response.ok(description.toString());
+
+    final multipart = await request.multipart()?.parts;
+    print('======> $multipart');
+    // final file = multipart.files['image']; // Assuming 'image' is the field name in your form
+
+    // if (file != null) {
+    //   final filename = file.filename;
+    //   final bytes = await file.readAsBytes();
+    //   final filePath = '/path/to/your/image/directory/${DateTime.now().millisecondsSinceEpoch}_$filename'; // Generate unique filename
+    //   final newFile = File(filePath);
+    //   await newFile.writeAsBytes(bytes);
+    //
+    //   // Use your ORM to save filePath to the database
+    //   // Example: await myOrm.insertImagePath(filePath, ...);
+    //
+    //   return Response.ok('Image uploaded successfully');
+    // } else {
+      return Response.badRequest(body: 'No image file found in the request');
+    // }
+  } else {
+    return Response.badRequest(body: 'Request is not multipart/form-data');
+  }
+
+  try {
+    final userId = int.tryParse('2');
+    print('=========ggg===> $userId');
+    if (userId == null) {
+      return Response.badRequest(body: jsonEncode({'error': 'Invalid user ID'}));
+    }
+
+    final body = await request.readAsString();
+    final Map<String, dynamic> data = jsonDecode(body) as Map<String, dynamic>;
+
+    final name = data['name'] as String?;
+    final email = data['email'] as String?;
+
+    if (name == null && email == null) {
+      return Response.badRequest(body: jsonEncode({'error': 'Name or email must be provided for update'}));
+    }
+
+
+    final deletedUser = await client.user.delete(
+      where: UserWhereUniqueInput(id: userId),
+    );
+
+    // Successfully deleted, but no content to return
+    // return Response.ok('Successfully Deleted'); // 204 No Content
+
+    return Response.ok(jsonEncode(deletedUser?.toJson()), headers: {'Content-Type': 'application/json'});
+  } catch (e) {
+    print('Error updating user: $e');
+    return Response.internalServerError(body: jsonEncode({'error': 'Failed to update user'}));
+  }
+
+}
+
 

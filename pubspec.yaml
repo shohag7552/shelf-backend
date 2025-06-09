@@ -9,6 +9,7 @@ environment:
 dependencies:
   shelf: ^1.4.2
   shelf_router: ^1.1.4
+  shelf_multipart: ^2.0.1
 #  mysql1: ^0.20.0
 #  mysql_client: ^0.0.27
   dotenv: ^4.2.0
