@@ -3,7 +3,7 @@
 
 generator client {
   provider = "dart run orm generate"
-  output   = "../lib/src/generated/prisma_client"
+  output   = "../lib/src/generated_prisma_client"
 }
 
 datasource db {
@@ -15,18 +15,27 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  posts     Post[]
+  password  String   // New: To store hashed password
+  role      String   @default("USER") // New: To define user roles (e.g., ADMIN, USER)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  posts Post[]
+
+  @@map("users")
 }
 
 model Post {
   id        Int      @id @default(autoincrement())
   title     String
-  content   String?
+  content   String?  @db.Text
   published Boolean  @default(false)
+  imageUrl  String?  @map("image_url")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
   author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int      @map("author_id") // Optional: customize column name
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  authorId  Int      @map("author_id")
+
+  @@map("posts")
 }

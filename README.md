@@ -31,6 +31,21 @@ This sample code handles HTTP GET requests to `/` and `/echo/<message>`
     └── README.md
     ```
 
+# Project Hot restart feature 
+with a file-watching tool like `watchexec` . Install via `Homebrew`
+
+    ```dart
+      brew install watchexec
+    ```
+Run command for running your server:
+ ```
+ watchexec -e dart -r "dart run bin/server.dart"
+ ```
+
+-e dart: only watch .dart files
+
+-r: restarts the process on change
+
 
 ## Step 1
  * just create a dart project for setup [shelf] backend. Which is use for create server response system. 

@@ -1,4 +1,4 @@
-import 'package:my_shelf_mysql_app/src/generated/prisma_client/client.dart';
+import 'package:my_shelf_mysql_app/src/generated_prisma_client/client.dart';
 import 'package:shelf/shelf.dart';
 // import 'package:orm/orm.dart';
 // import 'package:my_shelf_mysql_app/prisma/generated_dart_client/client.dart' as pc;

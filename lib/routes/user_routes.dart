@@ -1,11 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
-import 'package:my_shelf_mysql_app/src/generated/prisma_client/client.dart';
-import 'package:my_shelf_mysql_app/src/generated/prisma_client/prisma.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_multipart/shelf_multipart.dart';
 import 'package:shelf_router/shelf_router.dart';
-import 'package:orm/orm.dart'; // Import your Prisma client
+import 'package:orm/orm.dart';
+
+import '../src/generated_prisma_client/client.dart';
+import '../src/generated_prisma_client/prisma.dart'; // Import your Prisma client
 
 Router getUserRouter() {
   final router = Router();
@@ -15,6 +15,9 @@ Router getUserRouter() {
 
   /// Create a new user
   router.post('/image', _imageUploadUser);
+
+  /// upload image
+  // router.post('/upload', _uploadUser);
 
   ///Fetch all users
   router.get('/users', _fetchUsers);
@@ -54,6 +57,7 @@ Future<Response> _createUser(Request request) async {
       data: PrismaUnion.$1(UserCreateInput(
         email: email,
         name: PrismaUnion.$1(name??''),
+        password: '',
       )),
     );
 
@@ -184,6 +188,112 @@ Future<Response> _deleteUser(Request request, String id) async {
   }
 
 }
+
+// Future<Response> _uploadUser(Request request) async {
+//   print('--> Received upload request. Content-Type: ${request.headers[HttpHeaders.contentTypeHeader]}');
+//
+//   // 1. Validate if the request is multipart/form-data
+//   if (!request.isMultipart) {
+//     print('--- Error: Request is not multipart/form-data. ---');
+//     return Response.badRequest(body: jsonEncode({'error': 'Request must be multipart/form-data'}));
+//   }
+//
+//   try {
+//     // 2. Parse the multipart data. This will give you a list of FormData parts.
+//     final formDataList = await request.multipartFormData.toList();
+//     print('--> Received ${formDataList.length} multipart parts.');
+//
+//     String? uploadedFileUrl; // This will store the relative URL of the saved file
+//
+//     // 3. Iterate through the parts to find the file(s)
+//     for (final formData in formDataList) {
+//       print('--> Processing form part: ${formData.name}, Filename: ${formData.filename}');
+//
+//       // Check if this part is an actual file (identified by a non-null filename)
+//       if (formData.filename != null) {
+//         final originalFilename = formData.filename!;
+//         final contentType = formData.contentType;
+//
+//         // Optional: Basic validation for image types (e.g., only allow images)
+//         if (contentType != null && !contentType.startsWith('image/')) {
+//           print('--- Warning: Uploaded file is not an image ($contentType). Skipping. ---');
+//           // You might want to return an error here instead of skipping,
+//           // depending on your application's requirements.
+//           continue; // Skip this part if it's not an image
+//         }
+//
+//         // Read the binary content of the file
+//         final bytes = await formData.part.readBytes();
+//         print('--> File "${originalFilename}" has ${bytes.length} bytes.');
+//
+//         // Determine the file extension safely
+//         final fileExtension = p.extension(originalFilename);
+//         if (fileExtension.isEmpty) {
+//           // Fallback for files without extensions, or add more robust mime-type to extension mapping
+//           print('--- Warning: File has no extension. Using .bin as fallback. ---');
+//         }
+//
+//         // Generate a unique filename using UUID to prevent collisions and security issues
+//         final uniqueFileName = '${uuid.v4()}${fileExtension.isNotEmpty ? fileExtension.toLowerCase() : '.bin'}';
+//
+//         // Define the directory where images will be stored
+//         // 'uploads' is relative to the project root where 'dart run' is executed
+//         const String uploadDirectory = 'uploads';
+//
+//         // Construct the full path to save the file
+//         // Directory.current.path gives you the project root (where bin/server.dart is executed from)
+//         final filePath = p.join(Directory.current.path, uploadDirectory, uniqueFileName);
+//         print('--> Attempting to save file to: $filePath');
+//
+//         final file = File(filePath);
+//
+//         // Ensure the target directory exists. Create it recursively if not.
+//         final directory = Directory(p.dirname(filePath));
+//         if (!await directory.exists()) {
+//           await directory.create(recursive: true);
+//           print('--> Created directory: ${directory.path}');
+//         }
+//
+//         // Write the file bytes to the disk
+//         await file.writeAsBytes(bytes);
+//         print('--> File saved successfully to: ${file.path}');
+//
+//         // Construct the URL path that will be served by shelf_static
+//         // This is the path you'll store in your database.
+//         uploadedFileUrl = '/$uploadDirectory/$uniqueFileName';
+//         print('--> Generated file URL for database/client: $uploadedFileUrl');
+//
+//         // Assuming only one file upload per request for this example.
+//         // If you expect multiple files, remove this break and handle all files.
+//         break;
+//       } else {
+//         // If it's a regular form field (not a file), you can read its string value
+//         // String fieldValue = await formData.part.readString();
+//         // print('--> Form field ${formData.name}: $fieldValue');
+//       }
+//     }
+//
+//     // 4. Return the result to the client
+//     if (uploadedFileUrl != null) {
+//       return Response.ok(
+//         jsonEncode({
+//           'message': 'File uploaded successfully',
+//           'fileUrl': uploadedFileUrl,
+//         }),
+//         headers: {'Content-Type': 'application/json'},
+//       );
+//     } else {
+//       print('--- Error: No file part found in the request after processing. ---');
+//       return Response.badRequest(body: jsonEncode({'error': 'No file found in the request'}));
+//     }
+//   } catch (e, stackTrace) {
+//     // 5. Comprehensive error handling
+//     print('--- CRITICAL ERROR during file upload: $e ---');
+//     print('--- Stack trace: $stackTrace ---');
+//     return Response.internalServerError(body: jsonEncode({'error': 'Failed to upload file due to server error'}));
+//   }
+// }
+//
 
 Future<Response> _imageUploadUser(Request request) async {
   // final prisma = getPrismaClient(request);

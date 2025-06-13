@@ -476,9 +476,10 @@ class PostWhereInput implements _i1.JsonConvertible<Map<String, dynamic>> {
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
     this.author,
   });
 
@@ -497,11 +498,14 @@ class PostWhereInput implements _i1.JsonConvertible<Map<String, dynamic>> {
 
   final _i1.PrismaUnion<_i2.BoolFilter, bool>? published;
 
-  final _i1.PrismaUnion<_i2.IntFilter, int>? authorId;
+  final _i1.PrismaUnion<_i2.StringNullableFilter,
+      _i1.PrismaUnion<String, _i1.PrismaNull>>? imageUrl;
 
   final _i1.PrismaUnion<_i2.DateTimeFilter, DateTime>? createdAt;
 
   final _i1.PrismaUnion<_i2.DateTimeFilter, DateTime>? updatedAt;
+
+  final _i1.PrismaUnion<_i2.IntFilter, int>? authorId;
 
   final _i1.PrismaUnion<_i2.UserScalarRelationFilter, _i2.UserWhereInput>?
       author;
@@ -515,9 +519,10 @@ class PostWhereInput implements _i1.JsonConvertible<Map<String, dynamic>> {
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'authorId': authorId,
         'author': author,
       };
 }
@@ -552,6 +557,8 @@ class UserWhereInput implements _i1.JsonConvertible<Map<String, dynamic>> {
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
     this.posts,
@@ -570,6 +577,10 @@ class UserWhereInput implements _i1.JsonConvertible<Map<String, dynamic>> {
   final _i1.PrismaUnion<_i2.StringNullableFilter,
       _i1.PrismaUnion<String, _i1.PrismaNull>>? name;
 
+  final _i1.PrismaUnion<_i2.StringFilter, String>? password;
+
+  final _i1.PrismaUnion<_i2.StringFilter, String>? role;
+
   final _i1.PrismaUnion<_i2.DateTimeFilter, DateTime>? createdAt;
 
   final _i1.PrismaUnion<_i2.DateTimeFilter, DateTime>? updatedAt;
@@ -584,6 +595,8 @@ class UserWhereInput implements _i1.JsonConvertible<Map<String, dynamic>> {
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
         'posts': posts,
@@ -599,6 +612,8 @@ class UserWhereUniqueInput
     this.OR,
     this.NOT,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
     this.posts,
@@ -617,6 +632,10 @@ class UserWhereUniqueInput
   final _i1.PrismaUnion<_i2.StringNullableFilter,
       _i1.PrismaUnion<String, _i1.PrismaNull>>? name;
 
+  final _i1.PrismaUnion<_i2.StringFilter, String>? password;
+
+  final _i1.PrismaUnion<_i2.StringFilter, String>? role;
+
   final _i1.PrismaUnion<_i2.DateTimeFilter, DateTime>? createdAt;
 
   final _i1.PrismaUnion<_i2.DateTimeFilter, DateTime>? updatedAt;
@@ -631,6 +650,8 @@ class UserWhereUniqueInput
         'OR': OR,
         'NOT': NOT,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
         'posts': posts,
@@ -712,7 +733,9 @@ class PostOrderByRelationAggregateInput
 
 enum UserOrderByRelevanceFieldEnum implements _i1.PrismaEnum {
   email._('email'),
-  name$._('name');
+  name$._('name'),
+  password._('password'),
+  role._('role');
 
   const UserOrderByRelevanceFieldEnum._(this.name);
 
@@ -749,6 +772,8 @@ class UserOrderByWithRelationInput
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
     this.posts,
@@ -760,6 +785,10 @@ class UserOrderByWithRelationInput
   final _i2.SortOrder? email;
 
   final _i1.PrismaUnion<_i2.SortOrder, _i2.SortOrderInput>? name;
+
+  final _i2.SortOrder? password;
+
+  final _i2.SortOrder? role;
 
   final _i2.SortOrder? createdAt;
 
@@ -774,6 +803,8 @@ class UserOrderByWithRelationInput
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
         'posts': posts,
@@ -783,7 +814,8 @@ class UserOrderByWithRelationInput
 
 enum PostOrderByRelevanceFieldEnum implements _i1.PrismaEnum {
   title._('title'),
-  content._('content');
+  content._('content'),
+  imageUrl._('imageUrl');
 
   const PostOrderByRelevanceFieldEnum._(this.name);
 
@@ -821,9 +853,10 @@ class PostOrderByWithRelationInput
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
     this.author,
     this.$relevance,
   });
@@ -836,11 +869,13 @@ class PostOrderByWithRelationInput
 
   final _i2.SortOrder? published;
 
-  final _i2.SortOrder? authorId;
+  final _i1.PrismaUnion<_i2.SortOrder, _i2.SortOrderInput>? imageUrl;
 
   final _i2.SortOrder? createdAt;
 
   final _i2.SortOrder? updatedAt;
+
+  final _i2.SortOrder? authorId;
 
   final _i2.UserOrderByWithRelationInput? author;
 
@@ -852,9 +887,10 @@ class PostOrderByWithRelationInput
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'authorId': authorId,
         'author': author,
         '_relevance': $relevance,
       };
@@ -870,9 +906,10 @@ class PostWhereUniqueInput
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
     this.author,
   });
 
@@ -891,11 +928,14 @@ class PostWhereUniqueInput
 
   final _i1.PrismaUnion<_i2.BoolFilter, bool>? published;
 
-  final _i1.PrismaUnion<_i2.IntFilter, int>? authorId;
+  final _i1.PrismaUnion<_i2.StringNullableFilter,
+      _i1.PrismaUnion<String, _i1.PrismaNull>>? imageUrl;
 
   final _i1.PrismaUnion<_i2.DateTimeFilter, DateTime>? createdAt;
 
   final _i1.PrismaUnion<_i2.DateTimeFilter, DateTime>? updatedAt;
+
+  final _i1.PrismaUnion<_i2.IntFilter, int>? authorId;
 
   final _i1.PrismaUnion<_i2.UserScalarRelationFilter, _i2.UserWhereInput>?
       author;
@@ -909,9 +949,10 @@ class PostWhereUniqueInput
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'authorId': authorId,
         'author': author,
       };
 }
@@ -921,9 +962,10 @@ enum PostScalar<T> implements _i1.PrismaEnum, _i1.Reference<T> {
   title<String>('title', 'Post'),
   content<String>('content', 'Post'),
   published<bool>('published', 'Post'),
-  authorId<int>('authorId', 'Post'),
+  imageUrl<String>('imageUrl', 'Post'),
   createdAt<DateTime>('createdAt', 'Post'),
-  updatedAt<DateTime>('updatedAt', 'Post');
+  updatedAt<DateTime>('updatedAt', 'Post'),
+  authorId<int>('authorId', 'Post');
 
   const PostScalar(
     this.name,
@@ -1021,9 +1063,10 @@ class PostSelect implements _i1.JsonConvertible<Map<String, dynamic>> {
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
     this.author,
   });
 
@@ -1035,11 +1078,13 @@ class PostSelect implements _i1.JsonConvertible<Map<String, dynamic>> {
 
   final bool? published;
 
-  final bool? authorId;
+  final bool? imageUrl;
 
   final bool? createdAt;
 
   final bool? updatedAt;
+
+  final bool? authorId;
 
   final _i1.PrismaUnion<bool, _i2.PostAuthorArgs>? author;
 
@@ -1049,9 +1094,10 @@ class PostSelect implements _i1.JsonConvertible<Map<String, dynamic>> {
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'authorId': authorId,
         'author': author,
       };
 }
@@ -1061,6 +1107,8 @@ class UserSelect implements _i1.JsonConvertible<Map<String, dynamic>> {
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
     this.posts,
@@ -1072,6 +1120,10 @@ class UserSelect implements _i1.JsonConvertible<Map<String, dynamic>> {
   final bool? email;
 
   final bool? name;
+
+  final bool? password;
+
+  final bool? role;
 
   final bool? createdAt;
 
@@ -1086,6 +1138,8 @@ class UserSelect implements _i1.JsonConvertible<Map<String, dynamic>> {
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
         'posts': posts,
@@ -1097,6 +1151,8 @@ enum UserScalar<T> implements _i1.PrismaEnum, _i1.Reference<T> {
   id<int>('id', 'User'),
   email<String>('email', 'User'),
   name$<String>('name', 'User'),
+  password<String>('password', 'User'),
+  role<String>('role', 'User'),
   createdAt<DateTime>('createdAt', 'User'),
   updatedAt<DateTime>('updatedAt', 'User');
 
@@ -1118,6 +1174,7 @@ class PostCreateWithoutAuthorInput
     required this.title,
     this.content,
     this.published,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
   });
@@ -1128,6 +1185,8 @@ class PostCreateWithoutAuthorInput
 
   final bool? published;
 
+  final _i1.PrismaUnion<String, _i1.PrismaNull>? imageUrl;
+
   final DateTime? createdAt;
 
   final DateTime? updatedAt;
@@ -1137,6 +1196,7 @@ class PostCreateWithoutAuthorInput
         'title': title,
         'content': content,
         'published': published,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -1149,6 +1209,7 @@ class PostUncheckedCreateWithoutAuthorInput
     required this.title,
     this.content,
     this.published,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
   });
@@ -1161,6 +1222,8 @@ class PostUncheckedCreateWithoutAuthorInput
 
   final bool? published;
 
+  final _i1.PrismaUnion<String, _i1.PrismaNull>? imageUrl;
+
   final DateTime? createdAt;
 
   final DateTime? updatedAt;
@@ -1171,6 +1234,7 @@ class PostUncheckedCreateWithoutAuthorInput
         'title': title,
         'content': content,
         'published': published,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -1202,6 +1266,7 @@ class PostCreateManyAuthorInput
     required this.title,
     this.content,
     this.published,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
   });
@@ -1214,6 +1279,8 @@ class PostCreateManyAuthorInput
 
   final bool? published;
 
+  final _i1.PrismaUnion<String, _i1.PrismaNull>? imageUrl;
+
   final DateTime? createdAt;
 
   final DateTime? updatedAt;
@@ -1224,6 +1291,7 @@ class PostCreateManyAuthorInput
         'title': title,
         'content': content,
         'published': published,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -1285,6 +1353,8 @@ class UserCreateInput implements _i1.JsonConvertible<Map<String, dynamic>> {
   const UserCreateInput({
     required this.email,
     this.name,
+    required this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
     this.posts,
@@ -1293,6 +1363,10 @@ class UserCreateInput implements _i1.JsonConvertible<Map<String, dynamic>> {
   final String email;
 
   final _i1.PrismaUnion<String, _i1.PrismaNull>? name;
+
+  final String password;
+
+  final String? role;
 
   final DateTime? createdAt;
 
@@ -1304,6 +1378,8 @@ class UserCreateInput implements _i1.JsonConvertible<Map<String, dynamic>> {
   Map<String, dynamic> toJson() => {
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
         'posts': posts,
@@ -1349,6 +1425,8 @@ class UserUncheckedCreateInput
     this.id,
     required this.email,
     this.name,
+    required this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
     this.posts,
@@ -1359,6 +1437,10 @@ class UserUncheckedCreateInput
   final String email;
 
   final _i1.PrismaUnion<String, _i1.PrismaNull>? name;
+
+  final String password;
+
+  final String? role;
 
   final DateTime? createdAt;
 
@@ -1371,6 +1453,8 @@ class UserUncheckedCreateInput
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
         'posts': posts,
@@ -1393,6 +1477,8 @@ class UserCreateManyInput implements _i1.JsonConvertible<Map<String, dynamic>> {
     this.id,
     required this.email,
     this.name,
+    required this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
   });
@@ -1403,6 +1489,10 @@ class UserCreateManyInput implements _i1.JsonConvertible<Map<String, dynamic>> {
 
   final _i1.PrismaUnion<String, _i1.PrismaNull>? name;
 
+  final String password;
+
+  final String? role;
+
   final DateTime? createdAt;
 
   final DateTime? updatedAt;
@@ -1412,6 +1502,8 @@ class UserCreateManyInput implements _i1.JsonConvertible<Map<String, dynamic>> {
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -1463,6 +1555,7 @@ class PostUpdateWithoutAuthorInput
     this.title,
     this.content,
     this.published,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
   });
@@ -1476,6 +1569,11 @@ class PostUpdateWithoutAuthorInput
 
   final _i1.PrismaUnion<bool, _i2.BoolFieldUpdateOperationsInput>? published;
 
+  final _i1.PrismaUnion<
+      String,
+      _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
+          _i1.PrismaNull>>? imageUrl;
+
   final _i1.PrismaUnion<DateTime, _i2.DateTimeFieldUpdateOperationsInput>?
       createdAt;
 
@@ -1487,6 +1585,7 @@ class PostUpdateWithoutAuthorInput
         'title': title,
         'content': content,
         'published': published,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -1529,6 +1628,7 @@ class PostUncheckedUpdateWithoutAuthorInput
     this.title,
     this.content,
     this.published,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
   });
@@ -1544,6 +1644,11 @@ class PostUncheckedUpdateWithoutAuthorInput
 
   final _i1.PrismaUnion<bool, _i2.BoolFieldUpdateOperationsInput>? published;
 
+  final _i1.PrismaUnion<
+      String,
+      _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
+          _i1.PrismaNull>>? imageUrl;
+
   final _i1.PrismaUnion<DateTime, _i2.DateTimeFieldUpdateOperationsInput>?
       createdAt;
 
@@ -1556,6 +1661,7 @@ class PostUncheckedUpdateWithoutAuthorInput
         'title': title,
         'content': content,
         'published': published,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -1614,9 +1720,10 @@ class PostScalarWhereInput
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
   });
 
   final _i1.PrismaUnion<_i2.PostScalarWhereInput,
@@ -1636,11 +1743,14 @@ class PostScalarWhereInput
 
   final _i1.PrismaUnion<_i2.BoolFilter, bool>? published;
 
-  final _i1.PrismaUnion<_i2.IntFilter, int>? authorId;
+  final _i1.PrismaUnion<_i2.StringNullableFilter,
+      _i1.PrismaUnion<String, _i1.PrismaNull>>? imageUrl;
 
   final _i1.PrismaUnion<_i2.DateTimeFilter, DateTime>? createdAt;
 
   final _i1.PrismaUnion<_i2.DateTimeFilter, DateTime>? updatedAt;
+
+  final _i1.PrismaUnion<_i2.IntFilter, int>? authorId;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -1651,9 +1761,10 @@ class PostScalarWhereInput
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'authorId': authorId,
       };
 }
 
@@ -1663,6 +1774,7 @@ class PostUpdateManyMutationInput
     this.title,
     this.content,
     this.published,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
   });
@@ -1676,6 +1788,11 @@ class PostUpdateManyMutationInput
 
   final _i1.PrismaUnion<bool, _i2.BoolFieldUpdateOperationsInput>? published;
 
+  final _i1.PrismaUnion<
+      String,
+      _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
+          _i1.PrismaNull>>? imageUrl;
+
   final _i1.PrismaUnion<DateTime, _i2.DateTimeFieldUpdateOperationsInput>?
       createdAt;
 
@@ -1687,6 +1804,7 @@ class PostUpdateManyMutationInput
         'title': title,
         'content': content,
         'published': published,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -1699,6 +1817,7 @@ class PostUncheckedUpdateManyWithoutAuthorInput
     this.title,
     this.content,
     this.published,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
   });
@@ -1714,6 +1833,11 @@ class PostUncheckedUpdateManyWithoutAuthorInput
 
   final _i1.PrismaUnion<bool, _i2.BoolFieldUpdateOperationsInput>? published;
 
+  final _i1.PrismaUnion<
+      String,
+      _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
+          _i1.PrismaNull>>? imageUrl;
+
   final _i1.PrismaUnion<DateTime, _i2.DateTimeFieldUpdateOperationsInput>?
       createdAt;
 
@@ -1726,6 +1850,7 @@ class PostUncheckedUpdateManyWithoutAuthorInput
         'title': title,
         'content': content,
         'published': published,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -1822,6 +1947,8 @@ class UserUpdateInput implements _i1.JsonConvertible<Map<String, dynamic>> {
   const UserUpdateInput({
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
     this.posts,
@@ -1833,6 +1960,10 @@ class UserUpdateInput implements _i1.JsonConvertible<Map<String, dynamic>> {
       String,
       _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
           _i1.PrismaNull>>? name;
+
+  final _i1.PrismaUnion<String, _i2.StringFieldUpdateOperationsInput>? password;
+
+  final _i1.PrismaUnion<String, _i2.StringFieldUpdateOperationsInput>? role;
 
   final _i1.PrismaUnion<DateTime, _i2.DateTimeFieldUpdateOperationsInput>?
       createdAt;
@@ -1846,6 +1977,8 @@ class UserUpdateInput implements _i1.JsonConvertible<Map<String, dynamic>> {
   Map<String, dynamic> toJson() => {
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
         'posts': posts,
@@ -1926,6 +2059,8 @@ class UserUncheckedUpdateInput
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
     this.posts,
@@ -1940,6 +2075,10 @@ class UserUncheckedUpdateInput
       _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
           _i1.PrismaNull>>? name;
 
+  final _i1.PrismaUnion<String, _i2.StringFieldUpdateOperationsInput>? password;
+
+  final _i1.PrismaUnion<String, _i2.StringFieldUpdateOperationsInput>? role;
+
   final _i1.PrismaUnion<DateTime, _i2.DateTimeFieldUpdateOperationsInput>?
       createdAt;
 
@@ -1953,6 +2092,8 @@ class UserUncheckedUpdateInput
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
         'posts': posts,
@@ -1964,6 +2105,8 @@ class UserUpdateManyMutationInput
   const UserUpdateManyMutationInput({
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
   });
@@ -1975,6 +2118,10 @@ class UserUpdateManyMutationInput
       _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
           _i1.PrismaNull>>? name;
 
+  final _i1.PrismaUnion<String, _i2.StringFieldUpdateOperationsInput>? password;
+
+  final _i1.PrismaUnion<String, _i2.StringFieldUpdateOperationsInput>? role;
+
   final _i1.PrismaUnion<DateTime, _i2.DateTimeFieldUpdateOperationsInput>?
       createdAt;
 
@@ -1985,6 +2132,8 @@ class UserUpdateManyMutationInput
   Map<String, dynamic> toJson() => {
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -1996,6 +2145,8 @@ class UserUncheckedUpdateManyInput
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
   });
@@ -2009,6 +2160,10 @@ class UserUncheckedUpdateManyInput
       _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
           _i1.PrismaNull>>? name;
 
+  final _i1.PrismaUnion<String, _i2.StringFieldUpdateOperationsInput>? password;
+
+  final _i1.PrismaUnion<String, _i2.StringFieldUpdateOperationsInput>? role;
+
   final _i1.PrismaUnion<DateTime, _i2.DateTimeFieldUpdateOperationsInput>?
       createdAt;
 
@@ -2020,6 +2175,8 @@ class UserUncheckedUpdateManyInput
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -2030,6 +2187,8 @@ class UserCountAggregateOutputType {
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
     this.$all,
@@ -2040,6 +2199,8 @@ class UserCountAggregateOutputType {
         id: json['id'],
         email: json['email'],
         name: json['name'],
+        password: json['password'],
+        role: json['role'],
         createdAt: json['createdAt'],
         updatedAt: json['updatedAt'],
         $all: json['_all'],
@@ -2051,6 +2212,10 @@ class UserCountAggregateOutputType {
 
   final int? name;
 
+  final int? password;
+
+  final int? role;
+
   final int? createdAt;
 
   final int? updatedAt;
@@ -2061,6 +2226,8 @@ class UserCountAggregateOutputType {
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
         '_all': $all,
@@ -2094,6 +2261,8 @@ class UserMinAggregateOutputType {
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
   });
@@ -2103,6 +2272,8 @@ class UserMinAggregateOutputType {
         id: json['id'],
         email: json['email'],
         name: json['name'],
+        password: json['password'],
+        role: json['role'],
         createdAt: switch (json['createdAt']) {
           DateTime value => value,
           String value => DateTime.parse(value),
@@ -2121,6 +2292,10 @@ class UserMinAggregateOutputType {
 
   final String? name;
 
+  final String? password;
+
+  final String? role;
+
   final DateTime? createdAt;
 
   final DateTime? updatedAt;
@@ -2129,6 +2304,8 @@ class UserMinAggregateOutputType {
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt?.toIso8601String(),
         'updatedAt': updatedAt?.toIso8601String(),
       };
@@ -2139,6 +2316,8 @@ class UserMaxAggregateOutputType {
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
   });
@@ -2148,6 +2327,8 @@ class UserMaxAggregateOutputType {
         id: json['id'],
         email: json['email'],
         name: json['name'],
+        password: json['password'],
+        role: json['role'],
         createdAt: switch (json['createdAt']) {
           DateTime value => value,
           String value => DateTime.parse(value),
@@ -2166,6 +2347,10 @@ class UserMaxAggregateOutputType {
 
   final String? name;
 
+  final String? password;
+
+  final String? role;
+
   final DateTime? createdAt;
 
   final DateTime? updatedAt;
@@ -2174,6 +2359,8 @@ class UserMaxAggregateOutputType {
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt?.toIso8601String(),
         'updatedAt': updatedAt?.toIso8601String(),
       };
@@ -2184,6 +2371,8 @@ class UserGroupByOutputType {
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
     this.$count,
@@ -2197,6 +2386,8 @@ class UserGroupByOutputType {
         id: json['id'],
         email: json['email'],
         name: json['name'],
+        password: json['password'],
+        role: json['role'],
         createdAt: switch (json['createdAt']) {
           DateTime value => value,
           String value => DateTime.parse(value),
@@ -2230,6 +2421,10 @@ class UserGroupByOutputType {
 
   final String? name;
 
+  final String? password;
+
+  final String? role;
+
   final DateTime? createdAt;
 
   final DateTime? updatedAt;
@@ -2248,6 +2443,8 @@ class UserGroupByOutputType {
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt?.toIso8601String(),
         'updatedAt': updatedAt?.toIso8601String(),
         '_count': $count?.toJson(),
@@ -2264,6 +2461,8 @@ class UserCountOrderByAggregateInput
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
   });
@@ -2274,6 +2473,10 @@ class UserCountOrderByAggregateInput
 
   final _i2.SortOrder? name;
 
+  final _i2.SortOrder? password;
+
+  final _i2.SortOrder? role;
+
   final _i2.SortOrder? createdAt;
 
   final _i2.SortOrder? updatedAt;
@@ -2283,6 +2486,8 @@ class UserCountOrderByAggregateInput
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -2304,6 +2509,8 @@ class UserMaxOrderByAggregateInput
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
   });
@@ -2314,6 +2521,10 @@ class UserMaxOrderByAggregateInput
 
   final _i2.SortOrder? name;
 
+  final _i2.SortOrder? password;
+
+  final _i2.SortOrder? role;
+
   final _i2.SortOrder? createdAt;
 
   final _i2.SortOrder? updatedAt;
@@ -2323,6 +2534,8 @@ class UserMaxOrderByAggregateInput
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -2334,6 +2547,8 @@ class UserMinOrderByAggregateInput
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
   });
@@ -2344,6 +2559,10 @@ class UserMinOrderByAggregateInput
 
   final _i2.SortOrder? name;
 
+  final _i2.SortOrder? password;
+
+  final _i2.SortOrder? role;
+
   final _i2.SortOrder? createdAt;
 
   final _i2.SortOrder? updatedAt;
@@ -2353,6 +2572,8 @@ class UserMinOrderByAggregateInput
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -2374,6 +2595,8 @@ class UserOrderByWithAggregationInput
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
     this.$count,
@@ -2388,6 +2611,10 @@ class UserOrderByWithAggregationInput
   final _i2.SortOrder? email;
 
   final _i1.PrismaUnion<_i2.SortOrder, _i2.SortOrderInput>? name;
+
+  final _i2.SortOrder? password;
+
+  final _i2.SortOrder? role;
 
   final _i2.SortOrder? createdAt;
 
@@ -2408,6 +2635,8 @@ class UserOrderByWithAggregationInput
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
         '_count': $count,
@@ -3033,6 +3262,8 @@ class UserScalarWhereWithAggregatesInput
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
   });
@@ -3052,6 +3283,10 @@ class UserScalarWhereWithAggregatesInput
   final _i1.PrismaUnion<_i2.StringNullableWithAggregatesFilter,
       _i1.PrismaUnion<String, _i1.PrismaNull>>? name;
 
+  final _i1.PrismaUnion<_i2.StringWithAggregatesFilter, String>? password;
+
+  final _i1.PrismaUnion<_i2.StringWithAggregatesFilter, String>? role;
+
   final _i1.PrismaUnion<_i2.DateTimeWithAggregatesFilter, DateTime>? createdAt;
 
   final _i1.PrismaUnion<_i2.DateTimeWithAggregatesFilter, DateTime>? updatedAt;
@@ -3064,6 +3299,8 @@ class UserScalarWhereWithAggregatesInput
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -3075,6 +3312,8 @@ class UserCountAggregateOutputTypeSelect
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
     this.$all,
@@ -3085,6 +3324,10 @@ class UserCountAggregateOutputTypeSelect
   final bool? email;
 
   final bool? name;
+
+  final bool? password;
+
+  final bool? role;
 
   final bool? createdAt;
 
@@ -3097,6 +3340,8 @@ class UserCountAggregateOutputTypeSelect
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
         '_all': $all,
@@ -3159,6 +3404,8 @@ class UserMinAggregateOutputTypeSelect
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
   });
@@ -3169,6 +3416,10 @@ class UserMinAggregateOutputTypeSelect
 
   final bool? name;
 
+  final bool? password;
+
+  final bool? role;
+
   final bool? createdAt;
 
   final bool? updatedAt;
@@ -3178,6 +3429,8 @@ class UserMinAggregateOutputTypeSelect
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -3199,6 +3452,8 @@ class UserMaxAggregateOutputTypeSelect
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
   });
@@ -3209,6 +3464,10 @@ class UserMaxAggregateOutputTypeSelect
 
   final bool? name;
 
+  final bool? password;
+
+  final bool? role;
+
   final bool? createdAt;
 
   final bool? updatedAt;
@@ -3218,6 +3477,8 @@ class UserMaxAggregateOutputTypeSelect
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -3239,6 +3500,8 @@ class UserGroupByOutputTypeSelect
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
     this.$count,
@@ -3253,6 +3516,10 @@ class UserGroupByOutputTypeSelect
   final bool? email;
 
   final bool? name;
+
+  final bool? password;
+
+  final bool? role;
 
   final bool? createdAt;
 
@@ -3273,6 +3540,8 @@ class UserGroupByOutputTypeSelect
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
         '_count': $count,
@@ -3413,6 +3682,8 @@ class UserCreateWithoutPostsInput
   const UserCreateWithoutPostsInput({
     required this.email,
     this.name,
+    required this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
   });
@@ -3420,6 +3691,10 @@ class UserCreateWithoutPostsInput
   final String email;
 
   final _i1.PrismaUnion<String, _i1.PrismaNull>? name;
+
+  final String password;
+
+  final String? role;
 
   final DateTime? createdAt;
 
@@ -3429,6 +3704,8 @@ class UserCreateWithoutPostsInput
   Map<String, dynamic> toJson() => {
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -3440,6 +3717,8 @@ class UserUncheckedCreateWithoutPostsInput
     this.id,
     required this.email,
     this.name,
+    required this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
   });
@@ -3450,6 +3729,10 @@ class UserUncheckedCreateWithoutPostsInput
 
   final _i1.PrismaUnion<String, _i1.PrismaNull>? name;
 
+  final String password;
+
+  final String? role;
+
   final DateTime? createdAt;
 
   final DateTime? updatedAt;
@@ -3459,6 +3742,8 @@ class UserUncheckedCreateWithoutPostsInput
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -3511,6 +3796,7 @@ class PostCreateInput implements _i1.JsonConvertible<Map<String, dynamic>> {
     required this.title,
     this.content,
     this.published,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
     required this.author,
@@ -3521,6 +3807,8 @@ class PostCreateInput implements _i1.JsonConvertible<Map<String, dynamic>> {
   final _i1.PrismaUnion<String, _i1.PrismaNull>? content;
 
   final bool? published;
+
+  final _i1.PrismaUnion<String, _i1.PrismaNull>? imageUrl;
 
   final DateTime? createdAt;
 
@@ -3533,6 +3821,7 @@ class PostCreateInput implements _i1.JsonConvertible<Map<String, dynamic>> {
         'title': title,
         'content': content,
         'published': published,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
         'author': author,
@@ -3546,9 +3835,10 @@ class PostUncheckedCreateInput
     required this.title,
     this.content,
     this.published,
-    required this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    required this.authorId,
   });
 
   final int? id;
@@ -3559,11 +3849,13 @@ class PostUncheckedCreateInput
 
   final bool? published;
 
-  final int authorId;
+  final _i1.PrismaUnion<String, _i1.PrismaNull>? imageUrl;
 
   final DateTime? createdAt;
 
   final DateTime? updatedAt;
+
+  final int authorId;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -3571,9 +3863,10 @@ class PostUncheckedCreateInput
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'authorId': authorId,
       };
 }
 
@@ -3583,9 +3876,10 @@ class PostCreateManyInput implements _i1.JsonConvertible<Map<String, dynamic>> {
     required this.title,
     this.content,
     this.published,
-    required this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    required this.authorId,
   });
 
   final int? id;
@@ -3596,11 +3890,13 @@ class PostCreateManyInput implements _i1.JsonConvertible<Map<String, dynamic>> {
 
   final bool? published;
 
-  final int authorId;
+  final _i1.PrismaUnion<String, _i1.PrismaNull>? imageUrl;
 
   final DateTime? createdAt;
 
   final DateTime? updatedAt;
+
+  final int authorId;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -3608,9 +3904,10 @@ class PostCreateManyInput implements _i1.JsonConvertible<Map<String, dynamic>> {
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'authorId': authorId,
       };
 }
 
@@ -3619,6 +3916,8 @@ class UserUpdateWithoutPostsInput
   const UserUpdateWithoutPostsInput({
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
   });
@@ -3630,6 +3929,10 @@ class UserUpdateWithoutPostsInput
       _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
           _i1.PrismaNull>>? name;
 
+  final _i1.PrismaUnion<String, _i2.StringFieldUpdateOperationsInput>? password;
+
+  final _i1.PrismaUnion<String, _i2.StringFieldUpdateOperationsInput>? role;
+
   final _i1.PrismaUnion<DateTime, _i2.DateTimeFieldUpdateOperationsInput>?
       createdAt;
 
@@ -3640,6 +3943,8 @@ class UserUpdateWithoutPostsInput
   Map<String, dynamic> toJson() => {
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -3651,6 +3956,8 @@ class UserUncheckedUpdateWithoutPostsInput
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
   });
@@ -3664,6 +3971,10 @@ class UserUncheckedUpdateWithoutPostsInput
       _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
           _i1.PrismaNull>>? name;
 
+  final _i1.PrismaUnion<String, _i2.StringFieldUpdateOperationsInput>? password;
+
+  final _i1.PrismaUnion<String, _i2.StringFieldUpdateOperationsInput>? role;
+
   final _i1.PrismaUnion<DateTime, _i2.DateTimeFieldUpdateOperationsInput>?
       createdAt;
 
@@ -3675,6 +3986,8 @@ class UserUncheckedUpdateWithoutPostsInput
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
@@ -3762,6 +4075,7 @@ class PostUpdateInput implements _i1.JsonConvertible<Map<String, dynamic>> {
     this.title,
     this.content,
     this.published,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
     this.author,
@@ -3776,6 +4090,11 @@ class PostUpdateInput implements _i1.JsonConvertible<Map<String, dynamic>> {
 
   final _i1.PrismaUnion<bool, _i2.BoolFieldUpdateOperationsInput>? published;
 
+  final _i1.PrismaUnion<
+      String,
+      _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
+          _i1.PrismaNull>>? imageUrl;
+
   final _i1.PrismaUnion<DateTime, _i2.DateTimeFieldUpdateOperationsInput>?
       createdAt;
 
@@ -3789,6 +4108,7 @@ class PostUpdateInput implements _i1.JsonConvertible<Map<String, dynamic>> {
         'title': title,
         'content': content,
         'published': published,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
         'author': author,
@@ -3802,9 +4122,10 @@ class PostUncheckedUpdateInput
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
   });
 
   final _i1.PrismaUnion<int, _i2.IntFieldUpdateOperationsInput>? id;
@@ -3818,7 +4139,10 @@ class PostUncheckedUpdateInput
 
   final _i1.PrismaUnion<bool, _i2.BoolFieldUpdateOperationsInput>? published;
 
-  final _i1.PrismaUnion<int, _i2.IntFieldUpdateOperationsInput>? authorId;
+  final _i1.PrismaUnion<
+      String,
+      _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
+          _i1.PrismaNull>>? imageUrl;
 
   final _i1.PrismaUnion<DateTime, _i2.DateTimeFieldUpdateOperationsInput>?
       createdAt;
@@ -3826,15 +4150,18 @@ class PostUncheckedUpdateInput
   final _i1.PrismaUnion<DateTime, _i2.DateTimeFieldUpdateOperationsInput>?
       updatedAt;
 
+  final _i1.PrismaUnion<int, _i2.IntFieldUpdateOperationsInput>? authorId;
+
   @override
   Map<String, dynamic> toJson() => {
         'id': id,
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'authorId': authorId,
       };
 }
 
@@ -3845,9 +4172,10 @@ class PostUncheckedUpdateManyInput
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
   });
 
   final _i1.PrismaUnion<int, _i2.IntFieldUpdateOperationsInput>? id;
@@ -3861,7 +4189,10 @@ class PostUncheckedUpdateManyInput
 
   final _i1.PrismaUnion<bool, _i2.BoolFieldUpdateOperationsInput>? published;
 
-  final _i1.PrismaUnion<int, _i2.IntFieldUpdateOperationsInput>? authorId;
+  final _i1.PrismaUnion<
+      String,
+      _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
+          _i1.PrismaNull>>? imageUrl;
 
   final _i1.PrismaUnion<DateTime, _i2.DateTimeFieldUpdateOperationsInput>?
       createdAt;
@@ -3869,15 +4200,18 @@ class PostUncheckedUpdateManyInput
   final _i1.PrismaUnion<DateTime, _i2.DateTimeFieldUpdateOperationsInput>?
       updatedAt;
 
+  final _i1.PrismaUnion<int, _i2.IntFieldUpdateOperationsInput>? authorId;
+
   @override
   Map<String, dynamic> toJson() => {
         'id': id,
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'authorId': authorId,
       };
 }
 
@@ -3887,9 +4221,10 @@ class PostCountAggregateOutputType {
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
     this.$all,
   });
 
@@ -3899,9 +4234,10 @@ class PostCountAggregateOutputType {
         title: json['title'],
         content: json['content'],
         published: json['published'],
-        authorId: json['authorId'],
+        imageUrl: json['imageUrl'],
         createdAt: json['createdAt'],
         updatedAt: json['updatedAt'],
+        authorId: json['authorId'],
         $all: json['_all'],
       );
 
@@ -3913,11 +4249,13 @@ class PostCountAggregateOutputType {
 
   final int? published;
 
-  final int? authorId;
+  final int? imageUrl;
 
   final int? createdAt;
 
   final int? updatedAt;
+
+  final int? authorId;
 
   final int? $all;
 
@@ -3926,9 +4264,10 @@ class PostCountAggregateOutputType {
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'authorId': authorId,
         '_all': $all,
       };
 }
@@ -3983,9 +4322,10 @@ class PostMinAggregateOutputType {
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
   });
 
   factory PostMinAggregateOutputType.fromJson(Map json) =>
@@ -3994,7 +4334,7 @@ class PostMinAggregateOutputType {
         title: json['title'],
         content: json['content'],
         published: json['published'],
-        authorId: json['authorId'],
+        imageUrl: json['imageUrl'],
         createdAt: switch (json['createdAt']) {
           DateTime value => value,
           String value => DateTime.parse(value),
@@ -4005,6 +4345,7 @@ class PostMinAggregateOutputType {
           String value => DateTime.parse(value),
           _ => json['updatedAt']
         },
+        authorId: json['authorId'],
       );
 
   final int? id;
@@ -4015,20 +4356,23 @@ class PostMinAggregateOutputType {
 
   final bool? published;
 
-  final int? authorId;
+  final String? imageUrl;
 
   final DateTime? createdAt;
 
   final DateTime? updatedAt;
+
+  final int? authorId;
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt?.toIso8601String(),
         'updatedAt': updatedAt?.toIso8601String(),
+        'authorId': authorId,
       };
 }
 
@@ -4038,9 +4382,10 @@ class PostMaxAggregateOutputType {
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
   });
 
   factory PostMaxAggregateOutputType.fromJson(Map json) =>
@@ -4049,7 +4394,7 @@ class PostMaxAggregateOutputType {
         title: json['title'],
         content: json['content'],
         published: json['published'],
-        authorId: json['authorId'],
+        imageUrl: json['imageUrl'],
         createdAt: switch (json['createdAt']) {
           DateTime value => value,
           String value => DateTime.parse(value),
@@ -4060,6 +4405,7 @@ class PostMaxAggregateOutputType {
           String value => DateTime.parse(value),
           _ => json['updatedAt']
         },
+        authorId: json['authorId'],
       );
 
   final int? id;
@@ -4070,20 +4416,23 @@ class PostMaxAggregateOutputType {
 
   final bool? published;
 
-  final int? authorId;
+  final String? imageUrl;
 
   final DateTime? createdAt;
 
   final DateTime? updatedAt;
+
+  final int? authorId;
 
   Map<String, dynamic> toJson() => {
         'id': id,
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt?.toIso8601String(),
         'updatedAt': updatedAt?.toIso8601String(),
+        'authorId': authorId,
       };
 }
 
@@ -4093,9 +4442,10 @@ class PostGroupByOutputType {
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
     this.$count,
     this.$avg,
     this.$sum,
@@ -4108,7 +4458,7 @@ class PostGroupByOutputType {
         title: json['title'],
         content: json['content'],
         published: json['published'],
-        authorId: json['authorId'],
+        imageUrl: json['imageUrl'],
         createdAt: switch (json['createdAt']) {
           DateTime value => value,
           String value => DateTime.parse(value),
@@ -4119,6 +4469,7 @@ class PostGroupByOutputType {
           String value => DateTime.parse(value),
           _ => json['updatedAt']
         },
+        authorId: json['authorId'],
         $count: json['_count'] is Map
             ? _i2.PostCountAggregateOutputType.fromJson(json['_count'])
             : null,
@@ -4144,11 +4495,13 @@ class PostGroupByOutputType {
 
   final bool? published;
 
-  final int? authorId;
+  final String? imageUrl;
 
   final DateTime? createdAt;
 
   final DateTime? updatedAt;
+
+  final int? authorId;
 
   final _i2.PostCountAggregateOutputType? $count;
 
@@ -4165,9 +4518,10 @@ class PostGroupByOutputType {
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt?.toIso8601String(),
         'updatedAt': updatedAt?.toIso8601String(),
+        'authorId': authorId,
         '_count': $count?.toJson(),
         '_avg': $avg?.toJson(),
         '_sum': $sum?.toJson(),
@@ -4183,9 +4537,10 @@ class PostCountOrderByAggregateInput
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
   });
 
   final _i2.SortOrder? id;
@@ -4196,11 +4551,13 @@ class PostCountOrderByAggregateInput
 
   final _i2.SortOrder? published;
 
-  final _i2.SortOrder? authorId;
+  final _i2.SortOrder? imageUrl;
 
   final _i2.SortOrder? createdAt;
 
   final _i2.SortOrder? updatedAt;
+
+  final _i2.SortOrder? authorId;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -4208,9 +4565,10 @@ class PostCountOrderByAggregateInput
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'authorId': authorId,
       };
 }
 
@@ -4239,9 +4597,10 @@ class PostMaxOrderByAggregateInput
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
   });
 
   final _i2.SortOrder? id;
@@ -4252,11 +4611,13 @@ class PostMaxOrderByAggregateInput
 
   final _i2.SortOrder? published;
 
-  final _i2.SortOrder? authorId;
+  final _i2.SortOrder? imageUrl;
 
   final _i2.SortOrder? createdAt;
 
   final _i2.SortOrder? updatedAt;
+
+  final _i2.SortOrder? authorId;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -4264,9 +4625,10 @@ class PostMaxOrderByAggregateInput
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'authorId': authorId,
       };
 }
 
@@ -4277,9 +4639,10 @@ class PostMinOrderByAggregateInput
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
   });
 
   final _i2.SortOrder? id;
@@ -4290,11 +4653,13 @@ class PostMinOrderByAggregateInput
 
   final _i2.SortOrder? published;
 
-  final _i2.SortOrder? authorId;
+  final _i2.SortOrder? imageUrl;
 
   final _i2.SortOrder? createdAt;
 
   final _i2.SortOrder? updatedAt;
+
+  final _i2.SortOrder? authorId;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -4302,9 +4667,10 @@ class PostMinOrderByAggregateInput
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'authorId': authorId,
       };
 }
 
@@ -4333,9 +4699,10 @@ class PostOrderByWithAggregationInput
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
     this.$count,
     this.$avg,
     this.$max,
@@ -4351,11 +4718,13 @@ class PostOrderByWithAggregationInput
 
   final _i2.SortOrder? published;
 
-  final _i2.SortOrder? authorId;
+  final _i1.PrismaUnion<_i2.SortOrder, _i2.SortOrderInput>? imageUrl;
 
   final _i2.SortOrder? createdAt;
 
   final _i2.SortOrder? updatedAt;
+
+  final _i2.SortOrder? authorId;
 
   final _i2.PostCountOrderByAggregateInput? $count;
 
@@ -4373,9 +4742,10 @@ class PostOrderByWithAggregationInput
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'authorId': authorId,
         '_count': $count,
         '_avg': $avg,
         '_max': $max,
@@ -4454,9 +4824,10 @@ class PostScalarWhereWithAggregatesInput
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
   });
 
   final _i1.PrismaUnion<_i2.PostScalarWhereWithAggregatesInput,
@@ -4476,11 +4847,14 @@ class PostScalarWhereWithAggregatesInput
 
   final _i1.PrismaUnion<_i2.BoolWithAggregatesFilter, bool>? published;
 
-  final _i1.PrismaUnion<_i2.IntWithAggregatesFilter, int>? authorId;
+  final _i1.PrismaUnion<_i2.StringNullableWithAggregatesFilter,
+      _i1.PrismaUnion<String, _i1.PrismaNull>>? imageUrl;
 
   final _i1.PrismaUnion<_i2.DateTimeWithAggregatesFilter, DateTime>? createdAt;
 
   final _i1.PrismaUnion<_i2.DateTimeWithAggregatesFilter, DateTime>? updatedAt;
+
+  final _i1.PrismaUnion<_i2.IntWithAggregatesFilter, int>? authorId;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -4491,9 +4865,10 @@ class PostScalarWhereWithAggregatesInput
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'authorId': authorId,
       };
 }
 
@@ -4504,9 +4879,10 @@ class PostCountAggregateOutputTypeSelect
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
     this.$all,
   });
 
@@ -4518,11 +4894,13 @@ class PostCountAggregateOutputTypeSelect
 
   final bool? published;
 
-  final bool? authorId;
+  final bool? imageUrl;
 
   final bool? createdAt;
 
   final bool? updatedAt;
+
+  final bool? authorId;
 
   final bool? $all;
 
@@ -4532,9 +4910,10 @@ class PostCountAggregateOutputTypeSelect
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'authorId': authorId,
         '_all': $all,
       };
 }
@@ -4612,9 +4991,10 @@ class PostMinAggregateOutputTypeSelect
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
   });
 
   final bool? id;
@@ -4625,11 +5005,13 @@ class PostMinAggregateOutputTypeSelect
 
   final bool? published;
 
-  final bool? authorId;
+  final bool? imageUrl;
 
   final bool? createdAt;
 
   final bool? updatedAt;
+
+  final bool? authorId;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -4637,9 +5019,10 @@ class PostMinAggregateOutputTypeSelect
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'authorId': authorId,
       };
 }
 
@@ -4660,9 +5043,10 @@ class PostMaxAggregateOutputTypeSelect
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
   });
 
   final bool? id;
@@ -4673,11 +5057,13 @@ class PostMaxAggregateOutputTypeSelect
 
   final bool? published;
 
-  final bool? authorId;
+  final bool? imageUrl;
 
   final bool? createdAt;
 
   final bool? updatedAt;
+
+  final bool? authorId;
 
   @override
   Map<String, dynamic> toJson() => {
@@ -4685,9 +5071,10 @@ class PostMaxAggregateOutputTypeSelect
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'authorId': authorId,
       };
 }
 
@@ -4708,9 +5095,10 @@ class PostGroupByOutputTypeSelect
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
     this.$count,
     this.$avg,
     this.$sum,
@@ -4726,11 +5114,13 @@ class PostGroupByOutputTypeSelect
 
   final bool? published;
 
-  final bool? authorId;
+  final bool? imageUrl;
 
   final bool? createdAt;
 
   final bool? updatedAt;
+
+  final bool? authorId;
 
   final _i1.PrismaUnion<bool, _i2.PostGroupByOutputTypeCountArgs>? $count;
 
@@ -4748,9 +5138,10 @@ class PostGroupByOutputTypeSelect
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'authorId': authorId,
         '_count': $count,
         '_avg': $avg,
         '_sum': $sum,

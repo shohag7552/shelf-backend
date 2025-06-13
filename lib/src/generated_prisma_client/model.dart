@@ -8,9 +8,10 @@ class Post {
     this.title,
     this.content,
     this.published,
-    this.authorId,
+    this.imageUrl,
     this.createdAt,
     this.updatedAt,
+    this.authorId,
     this.author,
   });
 
@@ -19,7 +20,7 @@ class Post {
         title: json['title'],
         content: json['content'],
         published: json['published'],
-        authorId: json['authorId'],
+        imageUrl: json['imageUrl'],
         createdAt: switch (json['createdAt']) {
           DateTime value => value,
           String value => DateTime.parse(value),
@@ -30,6 +31,7 @@ class Post {
           String value => DateTime.parse(value),
           _ => json['updatedAt']
         },
+        authorId: json['authorId'],
         author:
             json['author'] is Map ? _i1.User.fromJson(json['author']) : null,
       );
@@ -42,11 +44,13 @@ class Post {
 
   final bool? published;
 
-  final int? authorId;
+  final String? imageUrl;
 
   final DateTime? createdAt;
 
   final DateTime? updatedAt;
+
+  final int? authorId;
 
   final _i1.User? author;
 
@@ -55,9 +59,10 @@ class Post {
         'title': title,
         'content': content,
         'published': published,
-        'authorId': authorId,
+        'imageUrl': imageUrl,
         'createdAt': createdAt?.toIso8601String(),
         'updatedAt': updatedAt?.toIso8601String(),
+        'authorId': authorId,
         'author': author?.toJson(),
       };
 }
@@ -67,6 +72,8 @@ class User {
     this.id,
     this.email,
     this.name,
+    this.password,
+    this.role,
     this.createdAt,
     this.updatedAt,
     this.posts,
@@ -77,6 +84,8 @@ class User {
         id: json['id'],
         email: json['email'],
         name: json['name'],
+        password: json['password'],
+        role: json['role'],
         createdAt: switch (json['createdAt']) {
           DateTime value => value,
           String value => DateTime.parse(value),
@@ -100,6 +109,10 @@ class User {
 
   final String? name;
 
+  final String? password;
+
+  final String? role;
+
   final DateTime? createdAt;
 
   final DateTime? updatedAt;
@@ -112,6 +125,8 @@ class User {
         'id': id,
         'email': email,
         'name': name,
+        'password': password,
+        'role': role,
         'createdAt': createdAt?.toIso8601String(),
         'updatedAt': updatedAt?.toIso8601String(),
         'posts': posts?.map((e) => e.toJson()),
