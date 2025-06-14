@@ -67,13 +67,16 @@ Run command for running your server:
    or
    dart run orm generate
    ``` 
-   * after generate you can migrate {npx prisma migrate dev} then database will updated with new table.
+   * after generate you can migrate `npx prisma migrate dev` then database will updated with new table.
     ```
    npx prisma migrate dev
    or
    npx prisma migrate dev --name your_added_field
    ```
-
+  * For `production` mode need to database migration code
+    ```
+    npx prisma migrate deploy
+    ```
 
 ## ================== **** ===================
 

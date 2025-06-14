@@ -52,8 +52,10 @@ Future<Response> _getAllPosts(Request request) async {
   try {
     // Optional: Include author details if query parameter 'includeAuthor' is 'true'
     final includeAuthor = request.url.queryParameters['includeAuthor'] == 'true';
+    final userId = request.url.queryParameters['user_id'];
 
     final posts = await prisma.post.findMany(
+      where: userId != null ? PostWhereInput(authorId: PrismaUnion.$2(int.parse(userId))) : null,
       include: includeAuthor ? PostInclude(author: PrismaUnion.$1(true)) : null,
     );
 
@@ -134,6 +136,8 @@ Future<Response> _getPostById(Request request, String id) async {
 
     // Optional: Include author details
     final includeAuthor = request.url.queryParameters['includeAuthor'] == 'true';
+
+    print('======include author: $includeAuthor // ${request.url.queryParameters}');
 
     final post = await prisma.post.findUnique(
       where: PostWhereUniqueInput(id: postId),
