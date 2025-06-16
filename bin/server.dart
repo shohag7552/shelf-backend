@@ -51,7 +51,7 @@ void main(List<String> args) async {
       final staticResponse = staticFilesHandler(request);
       print('=====has code: ${staticResponse.hashCode}');
       // if (staticResponse.statusCode != 404) {
-      //   return staticResponse;
+        return staticResponse;
       // }
     }
     print('--> Passing request to main application router: ${request.url.path}');
