@@ -2,9 +2,11 @@
 import 'dart:convert';
 import 'dart:io'; // Required for File operations for image cleanup
 import 'package:my_shelf_mysql_app/helper/client_helper.dart';
+import 'package:my_shelf_mysql_app/helper/project_helper.dart';
 import 'package:my_shelf_mysql_app/src/generated_prisma_client/prisma.dart';
 import 'package:orm/orm.dart';
 import 'package:shelf/shelf.dart';
+import 'package:shelf_multipart/shelf_multipart.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:path/path.dart' as p; // Required for path manipulation
 
@@ -81,6 +83,8 @@ Future<Response> _createPost(Request request) async {
     final body = await request.readAsString();
     final Map<String, dynamic> data = jsonDecode(body) as Map<String, dynamic>;
 
+    // String? imageUrl = await ProjectHelper.uploadImage(request);
+
     final title = data['title'] as String?;
     final content = data['content'] as String?;
     final published = data['published'] as bool? ?? false;
@@ -124,6 +128,7 @@ Future<Response> _createPost(Request request) async {
     print('Posts: Stack trace: $stackTrace');
     return Response.internalServerError(body: jsonEncode({'error': 'Failed to create post'}));
   }
+
 }
 
 Future<Response> _getPostById(Request request, String id) async {

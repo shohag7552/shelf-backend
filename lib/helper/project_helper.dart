@@ -1,4 +1,91 @@
+import 'dart:io';
+
+import 'package:shelf/shelf.dart';
+import 'package:shelf_multipart/shelf_multipart.dart';
+import 'package:path/path.dart' as p;
+import 'package:uuid/uuid.dart';
+
 class ProjectHelper {
+
+  static Future<String?> uploadImage(Request request) async {
+    String? uploadedFileUrl;
+
+    if (request.multipart() case var multipart?) {
+      await for (final part in multipart.parts) {
+        print('--> [UploadRoute] Processing part: Name=${part.headers}');
+
+        Map<String, String> data = {};
+        part.headers.forEach((key, value) {
+          data.addAll({key : value});
+        });
+
+        ///Convert data properly for getting required values [originalFilename] [contentType]
+        data = ProjectHelper.convertStringToMap(data.toString());
+
+        final originalFilename = data['filename'];
+        final contentType = data['content-type'];
+
+        print('=====> [UploadRoute] content data $originalFilename // $contentType // ${part.headers}');
+
+        if (originalFilename == null) {
+          print('--- [UploadRoute] Warning: FilePart received without a filename. Skipping. ---');
+          continue; // Skip parts that are treated as files but have no filename
+        }
+
+        // Optional: Basic validation for image types
+        if (contentType != null && !contentType.startsWith('image/')) {
+          print('--- [UploadRoute] Warning: Uploaded file is not an image ($contentType). Skipping. ---');
+          continue;
+        }
+
+        // Read the binary content of the file
+        final bytes = await part.readBytes(); // Use part.readBytes() directly
+        print('--> [UploadRoute] File $originalFilename has ${bytes.length} bytes.');
+
+        // // Determine the file extension safely
+        final fileExtension = p.extension(originalFilename);
+        if (fileExtension.isEmpty) {
+          print('--- [UploadRoute] Warning: File has no extension. Using .bin as fallback. ---');
+        }
+        final Uuid uuid = Uuid(); // I
+
+        // Generate a unique filename
+        final uniqueFileName = '${uuid.v4()}${fileExtension.isNotEmpty ? fileExtension.toLowerCase() : '.bin'}';
+        const String uploadDirectory = 'uploads';
+        final filePath = p.join(Directory.current.path, uploadDirectory, uniqueFileName);
+        print('--> [UploadRoute] Attempting to save file to: $filePath');
+
+        final file = File(filePath);
+
+        // Ensure the target directory exists
+        final directory = Directory(p.dirname(filePath));
+        if (!await directory.exists()) {
+          try {
+            await directory.create(recursive: true);
+            print('--> [UploadRoute] Created directory: ${directory.path}');
+          } catch (e) {
+            print('--- [UploadRoute] CRITICAL ERROR: Could not create upload directory: $e ---');
+            return null;
+          }
+        }
+
+        // Write the file bytes to the disk
+        await file.writeAsBytes(bytes);
+        print('--> [UploadRoute] File saved successfully to: ${file.path}');
+
+        // Construct the URL path
+        uploadedFileUrl = '/$uploadDirectory/$uniqueFileName';
+        print('--> [UploadRoute] Generated file URL for client/DB: $uploadedFileUrl');
+
+        return uploadDirectory;
+      }
+    } else {
+      return null;
+    }
+    return null;
+
+  }
+
   static Map<String, String> convertStringToMap(String data) {
     // Step 1: Remove the outer curly braces and split by ','
     String cleanedString = data.trim();
