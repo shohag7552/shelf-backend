@@ -78,6 +78,106 @@ Future<Response> _createPost(Request request) async {
   // If this router is mounted under `authenticateUser()`, you can get the user like this:
   // final authenticatedUser = getAuthenticatedUser(request);
   // print('Posts: User ${authenticatedUser.email} is creating a post.');
+  String title;
+  String? content;
+  bool published;
+  int authorId;
+  String? imageUrl;
+
+  try {
+    final Map<String, dynamic> formData = {}; // Use dynamic for potential file parts or other types
+
+    // Check if the request is multipart/form-data
+    if (request.formData() case var form?) {
+      await for (final data in form.formData) {
+        // print('==xx=> ${data.name}: ${await data.part.readString()}');
+        formData[data.name] = await data.part.readString();
+        // var key = data.name;
+        // var value = await data.part.readString();
+        // print('======key: $key, value: $value');
+        // formData.addAll({
+        //   data.name: await data.part.readString(),
+        // });
+      }
+
+      print('====body is : ${formData}');
+      // return Response(500);
+      title = formData['title'] as String;
+      content = formData['content'] as String?;
+      published = formData['published'] == 'true' ? true : (formData['published'] == 'false' ? false : false);
+      // imageUrl = formData['imageUrl'] as String?;
+      authorId = formData['authorId'] as int;
+      // return Response.ok('success');
+    }
+
+    /*if (request.isMultipart) {
+      print('--> [PostsRoute] Handling multipart/form-data request.');
+
+      await for (final part in request.parts) {
+        if (part is FieldPart) {
+          // This is a regular text field (e.g., title, content, published, authorId, imageUrl)
+          formData[part.name] = await part.readString();
+          print('--> [PostsRoute] Form Data Field: ${part.name} = ${formData[part.name]}');
+        }
+        // If you were uploading a file alongside other fields in the same form-data request,
+        // you would handle `part is FilePart` here, similar to your /upload route.
+        // For now, assuming imageUrl is just a string URL.
+      }
+
+      // Extract fields from the parsed formData Map
+      // Basic validation and type conversion
+      title = formData['title'] as String? ?? (throw Exception('Title is required'));
+      content = formData['content'] as String?; // Nullable
+      published = formData['published'] == 'true'; // Convert 'true'/'false' string to bool
+      authorId = int.tryParse(formData['authorId'] as String? ?? '') ?? (throw Exception('Author ID is required and must be an integer'));
+      imageUrl = formData['imageUrl'] as String?; // Nullable
+
+    } */ else if (request.headers[HttpHeaders.contentTypeHeader]?.contains('application/json') ?? false) {
+      // Handle application/json (your existing working logic)
+      print('--> [PostsRoute] Handling application/json request.');
+      final String requestBody = await request.readAsString();
+      final Map<String, dynamic> data = jsonDecode(requestBody);
+      print('--> [PostsRoute] JSON Data: $data');
+
+      title = data['title'] as String;
+      content = data['content'] as String?;
+      published = data['published'] as bool;
+      authorId = data['authorId'] as int;
+      imageUrl = data['imageUrl'] as String?;
+
+    } else {
+      // If content type is neither multipart nor JSON
+      print('--- [PostsRoute] Error: Unsupported Content-Type. ---');
+      return Response.badRequest(body: jsonEncode({'error': 'Unsupported Content-Type. Use application/json or multipart/form-data.'}));
+    }
+
+    // Create the post using Prisma
+    final newPost = await prisma.post.create(
+      data: PrismaUnion.$1(PostCreateInput(
+        title: title,
+        content: PrismaUnion.$1(content??''),
+        published: published,
+        imageUrl: PrismaUnion.$1(imageUrl??''), // Store the image URL/path
+        author: UserCreateNestedOneWithoutPostsInput(
+          // Connect to the existing user by authorId
+          connect: UserWhereUniqueInput(id: authorId),
+        ),
+        // author: UserRelationInput.connect(
+        //   UserWhereUniqueInput(id: authorId),
+        // ),
+      )),
+    );
+
+    print('--> [PostsRoute] Post created successfully: ${newPost.id}');
+    return Response.ok(
+      jsonEncode(newPost.toJson()),
+      headers: {'Content-Type': 'application/json'},
+    );
+  } catch (e, st) {
+    print('--- [PostsRoute] Error creating post: $e ---');
+    print('--- [PostsRoute] Stack trace: $st ---');
+    return Response.internalServerError(body: jsonEncode({'error': 'Failed to create post', 'details': e.toString()}));
+  }
 
   try {
     final body = await request.readAsString();

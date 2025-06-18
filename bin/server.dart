@@ -31,7 +31,7 @@ void main(List<String> args) async {
   if (!await uploadsDir.exists()) {
     try {
       await uploadsDir.create(recursive: true);
-      print('--> Successfully created uploads directory: ${uploadsDirPath}');
+      print('--> Successfully created uploads directory: $uploadsDirPath');
     } catch (e) {
       print('--- CRITICAL ERROR: Failed to create uploads directory at $uploadsDirPath: $e ---');
       exit(1);
