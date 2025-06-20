@@ -15,6 +15,7 @@ model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   name      String?
+  imageUrl  String?  @map("image_url")
   password  String   // New: To store hashed password
   role      String   @default("USER") // New: To define user roles (e.g., ADMIN, USER)
   createdAt DateTime @default(now()) @map("created_at")

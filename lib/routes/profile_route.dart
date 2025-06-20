@@ -48,6 +48,7 @@ Future<Response> _getProfile(Request request) async {
         'email': user.email,
         'name': user.name,
         'role': user.role,
+        'imageUrl': user.imageUrl,
         'createdAt': user.createdAt?.toIso8601String(),
         'updatedAt': user.updatedAt?.toIso8601String(),
       }),

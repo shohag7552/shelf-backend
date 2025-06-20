@@ -72,6 +72,7 @@ class User {
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -84,6 +85,7 @@ class User {
         id: json['id'],
         email: json['email'],
         name: json['name'],
+        imageUrl: json['imageUrl'],
         password: json['password'],
         role: json['role'],
         createdAt: switch (json['createdAt']) {
@@ -109,6 +111,8 @@ class User {
 
   final String? name;
 
+  final String? imageUrl;
+
   final String? password;
 
   final String? role;
@@ -125,6 +129,7 @@ class User {
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt?.toIso8601String(),

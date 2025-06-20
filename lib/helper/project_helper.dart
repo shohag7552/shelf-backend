@@ -1,11 +1,71 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:mime/mime.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_multipart/shelf_multipart.dart';
 import 'package:path/path.dart' as p;
 import 'package:uuid/uuid.dart';
 
 class ProjectHelper {
+
+  static Future<(Map<String, dynamic>, String?)> generateDataWithMultipart(Request request) async {
+    Map<String, dynamic> data = {};
+    String? imageUrl;
+
+    final contentType = request.headers[HttpHeaders.contentTypeHeader];
+
+    if (contentType != null && contentType.contains('application/json')) {
+      // Handle JSON request
+      print('==== [json]');
+      final String body = await request.readAsString();
+      data = jsonDecode(body) as Map<String, dynamic>;
+
+    } else if (contentType != null && contentType.contains('multipart/form-data')) {
+      // Handle multipart form data
+      print('==== [form-data]');
+      final boundary = contentType.split("boundary=").last;
+      final transformer = MimeMultipartTransformer(boundary);
+      final parts = transformer.bind(request.read());
+
+      final Map<String, String> formFields = {};
+      File? imageFile;
+
+      await for (final part in parts) {
+        final headers = part.headers;
+        final contentDisposition = headers['content-disposition'];
+        if (contentDisposition == null) continue;
+
+        final nameMatch = RegExp(r'name="([^"]+)"').firstMatch(contentDisposition);
+        final filenameMatch = RegExp(r'filename="([^"]+)"').firstMatch(contentDisposition);
+
+        final name = nameMatch?.group(1);
+        final filename = filenameMatch?.group(1);
+
+        final d = await part.fold<List<int>>([], (p, e) => p..addAll(e));
+
+        if (filename == null && name != null) {
+          data[name] = utf8.decode(d);
+          // formFields[name] = utf8.decode(data);
+        } else if (name == 'image' && filename != null) {
+          final uploadsDir = Directory('uploads');
+          if (!uploadsDir.existsSync()) uploadsDir.createSync();
+
+          final safeName = '${Uuid().v4()}_${filename.replaceAll(RegExp(r'[^a-zA-Z0-9_.-]'), '_')}';
+          final imagePath = p.join(uploadsDir.path, safeName);
+          final file = File(imagePath);
+          await file.writeAsBytes(d);
+          imageFile = file;
+        }
+      }
+      imageUrl = imageFile?.path;
+    } else {
+      // return Response.badRequest(body: jsonEncode({
+      //   'error': 'Unsupported Content-Type. Use application/json or multipart/form-data.'
+      // }));
+    }
+    return (data, imageUrl);
+  }
 
   static Future<String?> uploadImage(Request request) async {
     String? uploadedFileUrl;
@@ -77,7 +137,7 @@ class ProjectHelper {
         uploadedFileUrl = '/$uploadDirectory/$uniqueFileName';
         print('--> [UploadRoute] Generated file URL for client/DB: $uploadedFileUrl');
 
-        return uploadDirectory;
+        return uploadedFileUrl;
       }
     } else {
       return null;

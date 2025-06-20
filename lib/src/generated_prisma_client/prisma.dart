@@ -557,6 +557,7 @@ class UserWhereInput implements _i1.JsonConvertible<Map<String, dynamic>> {
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -577,6 +578,9 @@ class UserWhereInput implements _i1.JsonConvertible<Map<String, dynamic>> {
   final _i1.PrismaUnion<_i2.StringNullableFilter,
       _i1.PrismaUnion<String, _i1.PrismaNull>>? name;
 
+  final _i1.PrismaUnion<_i2.StringNullableFilter,
+      _i1.PrismaUnion<String, _i1.PrismaNull>>? imageUrl;
+
   final _i1.PrismaUnion<_i2.StringFilter, String>? password;
 
   final _i1.PrismaUnion<_i2.StringFilter, String>? role;
@@ -595,6 +599,7 @@ class UserWhereInput implements _i1.JsonConvertible<Map<String, dynamic>> {
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -612,6 +617,7 @@ class UserWhereUniqueInput
     this.OR,
     this.NOT,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -632,6 +638,9 @@ class UserWhereUniqueInput
   final _i1.PrismaUnion<_i2.StringNullableFilter,
       _i1.PrismaUnion<String, _i1.PrismaNull>>? name;
 
+  final _i1.PrismaUnion<_i2.StringNullableFilter,
+      _i1.PrismaUnion<String, _i1.PrismaNull>>? imageUrl;
+
   final _i1.PrismaUnion<_i2.StringFilter, String>? password;
 
   final _i1.PrismaUnion<_i2.StringFilter, String>? role;
@@ -650,6 +659,7 @@ class UserWhereUniqueInput
         'OR': OR,
         'NOT': NOT,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -734,6 +744,7 @@ class PostOrderByRelationAggregateInput
 enum UserOrderByRelevanceFieldEnum implements _i1.PrismaEnum {
   email._('email'),
   name$._('name'),
+  imageUrl._('imageUrl'),
   password._('password'),
   role._('role');
 
@@ -772,6 +783,7 @@ class UserOrderByWithRelationInput
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -785,6 +797,8 @@ class UserOrderByWithRelationInput
   final _i2.SortOrder? email;
 
   final _i1.PrismaUnion<_i2.SortOrder, _i2.SortOrderInput>? name;
+
+  final _i1.PrismaUnion<_i2.SortOrder, _i2.SortOrderInput>? imageUrl;
 
   final _i2.SortOrder? password;
 
@@ -803,6 +817,7 @@ class UserOrderByWithRelationInput
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -1107,6 +1122,7 @@ class UserSelect implements _i1.JsonConvertible<Map<String, dynamic>> {
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -1120,6 +1136,8 @@ class UserSelect implements _i1.JsonConvertible<Map<String, dynamic>> {
   final bool? email;
 
   final bool? name;
+
+  final bool? imageUrl;
 
   final bool? password;
 
@@ -1138,6 +1156,7 @@ class UserSelect implements _i1.JsonConvertible<Map<String, dynamic>> {
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -1151,6 +1170,7 @@ enum UserScalar<T> implements _i1.PrismaEnum, _i1.Reference<T> {
   id<int>('id', 'User'),
   email<String>('email', 'User'),
   name$<String>('name', 'User'),
+  imageUrl<String>('imageUrl', 'User'),
   password<String>('password', 'User'),
   role<String>('role', 'User'),
   createdAt<DateTime>('createdAt', 'User'),
@@ -1353,6 +1373,7 @@ class UserCreateInput implements _i1.JsonConvertible<Map<String, dynamic>> {
   const UserCreateInput({
     required this.email,
     this.name,
+    this.imageUrl,
     required this.password,
     this.role,
     this.createdAt,
@@ -1363,6 +1384,8 @@ class UserCreateInput implements _i1.JsonConvertible<Map<String, dynamic>> {
   final String email;
 
   final _i1.PrismaUnion<String, _i1.PrismaNull>? name;
+
+  final _i1.PrismaUnion<String, _i1.PrismaNull>? imageUrl;
 
   final String password;
 
@@ -1378,6 +1401,7 @@ class UserCreateInput implements _i1.JsonConvertible<Map<String, dynamic>> {
   Map<String, dynamic> toJson() => {
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -1425,6 +1449,7 @@ class UserUncheckedCreateInput
     this.id,
     required this.email,
     this.name,
+    this.imageUrl,
     required this.password,
     this.role,
     this.createdAt,
@@ -1437,6 +1462,8 @@ class UserUncheckedCreateInput
   final String email;
 
   final _i1.PrismaUnion<String, _i1.PrismaNull>? name;
+
+  final _i1.PrismaUnion<String, _i1.PrismaNull>? imageUrl;
 
   final String password;
 
@@ -1453,6 +1480,7 @@ class UserUncheckedCreateInput
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -1477,6 +1505,7 @@ class UserCreateManyInput implements _i1.JsonConvertible<Map<String, dynamic>> {
     this.id,
     required this.email,
     this.name,
+    this.imageUrl,
     required this.password,
     this.role,
     this.createdAt,
@@ -1488,6 +1517,8 @@ class UserCreateManyInput implements _i1.JsonConvertible<Map<String, dynamic>> {
   final String email;
 
   final _i1.PrismaUnion<String, _i1.PrismaNull>? name;
+
+  final _i1.PrismaUnion<String, _i1.PrismaNull>? imageUrl;
 
   final String password;
 
@@ -1502,6 +1533,7 @@ class UserCreateManyInput implements _i1.JsonConvertible<Map<String, dynamic>> {
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -1947,6 +1979,7 @@ class UserUpdateInput implements _i1.JsonConvertible<Map<String, dynamic>> {
   const UserUpdateInput({
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -1960,6 +1993,11 @@ class UserUpdateInput implements _i1.JsonConvertible<Map<String, dynamic>> {
       String,
       _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
           _i1.PrismaNull>>? name;
+
+  final _i1.PrismaUnion<
+      String,
+      _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
+          _i1.PrismaNull>>? imageUrl;
 
   final _i1.PrismaUnion<String, _i2.StringFieldUpdateOperationsInput>? password;
 
@@ -1977,6 +2015,7 @@ class UserUpdateInput implements _i1.JsonConvertible<Map<String, dynamic>> {
   Map<String, dynamic> toJson() => {
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -2059,6 +2098,7 @@ class UserUncheckedUpdateInput
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -2074,6 +2114,11 @@ class UserUncheckedUpdateInput
       String,
       _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
           _i1.PrismaNull>>? name;
+
+  final _i1.PrismaUnion<
+      String,
+      _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
+          _i1.PrismaNull>>? imageUrl;
 
   final _i1.PrismaUnion<String, _i2.StringFieldUpdateOperationsInput>? password;
 
@@ -2092,6 +2137,7 @@ class UserUncheckedUpdateInput
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -2105,6 +2151,7 @@ class UserUpdateManyMutationInput
   const UserUpdateManyMutationInput({
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -2117,6 +2164,11 @@ class UserUpdateManyMutationInput
       String,
       _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
           _i1.PrismaNull>>? name;
+
+  final _i1.PrismaUnion<
+      String,
+      _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
+          _i1.PrismaNull>>? imageUrl;
 
   final _i1.PrismaUnion<String, _i2.StringFieldUpdateOperationsInput>? password;
 
@@ -2132,6 +2184,7 @@ class UserUpdateManyMutationInput
   Map<String, dynamic> toJson() => {
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -2145,6 +2198,7 @@ class UserUncheckedUpdateManyInput
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -2160,6 +2214,11 @@ class UserUncheckedUpdateManyInput
       _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
           _i1.PrismaNull>>? name;
 
+  final _i1.PrismaUnion<
+      String,
+      _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
+          _i1.PrismaNull>>? imageUrl;
+
   final _i1.PrismaUnion<String, _i2.StringFieldUpdateOperationsInput>? password;
 
   final _i1.PrismaUnion<String, _i2.StringFieldUpdateOperationsInput>? role;
@@ -2175,6 +2234,7 @@ class UserUncheckedUpdateManyInput
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -2187,6 +2247,7 @@ class UserCountAggregateOutputType {
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -2199,6 +2260,7 @@ class UserCountAggregateOutputType {
         id: json['id'],
         email: json['email'],
         name: json['name'],
+        imageUrl: json['imageUrl'],
         password: json['password'],
         role: json['role'],
         createdAt: json['createdAt'],
@@ -2211,6 +2273,8 @@ class UserCountAggregateOutputType {
   final int? email;
 
   final int? name;
+
+  final int? imageUrl;
 
   final int? password;
 
@@ -2226,6 +2290,7 @@ class UserCountAggregateOutputType {
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -2261,6 +2326,7 @@ class UserMinAggregateOutputType {
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -2272,6 +2338,7 @@ class UserMinAggregateOutputType {
         id: json['id'],
         email: json['email'],
         name: json['name'],
+        imageUrl: json['imageUrl'],
         password: json['password'],
         role: json['role'],
         createdAt: switch (json['createdAt']) {
@@ -2292,6 +2359,8 @@ class UserMinAggregateOutputType {
 
   final String? name;
 
+  final String? imageUrl;
+
   final String? password;
 
   final String? role;
@@ -2304,6 +2373,7 @@ class UserMinAggregateOutputType {
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt?.toIso8601String(),
@@ -2316,6 +2386,7 @@ class UserMaxAggregateOutputType {
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -2327,6 +2398,7 @@ class UserMaxAggregateOutputType {
         id: json['id'],
         email: json['email'],
         name: json['name'],
+        imageUrl: json['imageUrl'],
         password: json['password'],
         role: json['role'],
         createdAt: switch (json['createdAt']) {
@@ -2347,6 +2419,8 @@ class UserMaxAggregateOutputType {
 
   final String? name;
 
+  final String? imageUrl;
+
   final String? password;
 
   final String? role;
@@ -2359,6 +2433,7 @@ class UserMaxAggregateOutputType {
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt?.toIso8601String(),
@@ -2371,6 +2446,7 @@ class UserGroupByOutputType {
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -2386,6 +2462,7 @@ class UserGroupByOutputType {
         id: json['id'],
         email: json['email'],
         name: json['name'],
+        imageUrl: json['imageUrl'],
         password: json['password'],
         role: json['role'],
         createdAt: switch (json['createdAt']) {
@@ -2421,6 +2498,8 @@ class UserGroupByOutputType {
 
   final String? name;
 
+  final String? imageUrl;
+
   final String? password;
 
   final String? role;
@@ -2443,6 +2522,7 @@ class UserGroupByOutputType {
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt?.toIso8601String(),
@@ -2461,6 +2541,7 @@ class UserCountOrderByAggregateInput
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -2472,6 +2553,8 @@ class UserCountOrderByAggregateInput
   final _i2.SortOrder? email;
 
   final _i2.SortOrder? name;
+
+  final _i2.SortOrder? imageUrl;
 
   final _i2.SortOrder? password;
 
@@ -2486,6 +2569,7 @@ class UserCountOrderByAggregateInput
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -2509,6 +2593,7 @@ class UserMaxOrderByAggregateInput
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -2520,6 +2605,8 @@ class UserMaxOrderByAggregateInput
   final _i2.SortOrder? email;
 
   final _i2.SortOrder? name;
+
+  final _i2.SortOrder? imageUrl;
 
   final _i2.SortOrder? password;
 
@@ -2534,6 +2621,7 @@ class UserMaxOrderByAggregateInput
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -2547,6 +2635,7 @@ class UserMinOrderByAggregateInput
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -2558,6 +2647,8 @@ class UserMinOrderByAggregateInput
   final _i2.SortOrder? email;
 
   final _i2.SortOrder? name;
+
+  final _i2.SortOrder? imageUrl;
 
   final _i2.SortOrder? password;
 
@@ -2572,6 +2663,7 @@ class UserMinOrderByAggregateInput
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -2595,6 +2687,7 @@ class UserOrderByWithAggregationInput
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -2611,6 +2704,8 @@ class UserOrderByWithAggregationInput
   final _i2.SortOrder? email;
 
   final _i1.PrismaUnion<_i2.SortOrder, _i2.SortOrderInput>? name;
+
+  final _i1.PrismaUnion<_i2.SortOrder, _i2.SortOrderInput>? imageUrl;
 
   final _i2.SortOrder? password;
 
@@ -2635,6 +2730,7 @@ class UserOrderByWithAggregationInput
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -3262,6 +3358,7 @@ class UserScalarWhereWithAggregatesInput
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -3283,6 +3380,9 @@ class UserScalarWhereWithAggregatesInput
   final _i1.PrismaUnion<_i2.StringNullableWithAggregatesFilter,
       _i1.PrismaUnion<String, _i1.PrismaNull>>? name;
 
+  final _i1.PrismaUnion<_i2.StringNullableWithAggregatesFilter,
+      _i1.PrismaUnion<String, _i1.PrismaNull>>? imageUrl;
+
   final _i1.PrismaUnion<_i2.StringWithAggregatesFilter, String>? password;
 
   final _i1.PrismaUnion<_i2.StringWithAggregatesFilter, String>? role;
@@ -3299,6 +3399,7 @@ class UserScalarWhereWithAggregatesInput
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -3312,6 +3413,7 @@ class UserCountAggregateOutputTypeSelect
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -3324,6 +3426,8 @@ class UserCountAggregateOutputTypeSelect
   final bool? email;
 
   final bool? name;
+
+  final bool? imageUrl;
 
   final bool? password;
 
@@ -3340,6 +3444,7 @@ class UserCountAggregateOutputTypeSelect
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -3404,6 +3509,7 @@ class UserMinAggregateOutputTypeSelect
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -3415,6 +3521,8 @@ class UserMinAggregateOutputTypeSelect
   final bool? email;
 
   final bool? name;
+
+  final bool? imageUrl;
 
   final bool? password;
 
@@ -3429,6 +3537,7 @@ class UserMinAggregateOutputTypeSelect
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -3452,6 +3561,7 @@ class UserMaxAggregateOutputTypeSelect
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -3463,6 +3573,8 @@ class UserMaxAggregateOutputTypeSelect
   final bool? email;
 
   final bool? name;
+
+  final bool? imageUrl;
 
   final bool? password;
 
@@ -3477,6 +3589,7 @@ class UserMaxAggregateOutputTypeSelect
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -3500,6 +3613,7 @@ class UserGroupByOutputTypeSelect
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -3516,6 +3630,8 @@ class UserGroupByOutputTypeSelect
   final bool? email;
 
   final bool? name;
+
+  final bool? imageUrl;
 
   final bool? password;
 
@@ -3540,6 +3656,7 @@ class UserGroupByOutputTypeSelect
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -3682,6 +3799,7 @@ class UserCreateWithoutPostsInput
   const UserCreateWithoutPostsInput({
     required this.email,
     this.name,
+    this.imageUrl,
     required this.password,
     this.role,
     this.createdAt,
@@ -3691,6 +3809,8 @@ class UserCreateWithoutPostsInput
   final String email;
 
   final _i1.PrismaUnion<String, _i1.PrismaNull>? name;
+
+  final _i1.PrismaUnion<String, _i1.PrismaNull>? imageUrl;
 
   final String password;
 
@@ -3704,6 +3824,7 @@ class UserCreateWithoutPostsInput
   Map<String, dynamic> toJson() => {
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -3717,6 +3838,7 @@ class UserUncheckedCreateWithoutPostsInput
     this.id,
     required this.email,
     this.name,
+    this.imageUrl,
     required this.password,
     this.role,
     this.createdAt,
@@ -3728,6 +3850,8 @@ class UserUncheckedCreateWithoutPostsInput
   final String email;
 
   final _i1.PrismaUnion<String, _i1.PrismaNull>? name;
+
+  final _i1.PrismaUnion<String, _i1.PrismaNull>? imageUrl;
 
   final String password;
 
@@ -3742,6 +3866,7 @@ class UserUncheckedCreateWithoutPostsInput
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -3916,6 +4041,7 @@ class UserUpdateWithoutPostsInput
   const UserUpdateWithoutPostsInput({
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -3928,6 +4054,11 @@ class UserUpdateWithoutPostsInput
       String,
       _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
           _i1.PrismaNull>>? name;
+
+  final _i1.PrismaUnion<
+      String,
+      _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
+          _i1.PrismaNull>>? imageUrl;
 
   final _i1.PrismaUnion<String, _i2.StringFieldUpdateOperationsInput>? password;
 
@@ -3943,6 +4074,7 @@ class UserUpdateWithoutPostsInput
   Map<String, dynamic> toJson() => {
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,
@@ -3956,6 +4088,7 @@ class UserUncheckedUpdateWithoutPostsInput
     this.id,
     this.email,
     this.name,
+    this.imageUrl,
     this.password,
     this.role,
     this.createdAt,
@@ -3970,6 +4103,11 @@ class UserUncheckedUpdateWithoutPostsInput
       String,
       _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
           _i1.PrismaNull>>? name;
+
+  final _i1.PrismaUnion<
+      String,
+      _i1.PrismaUnion<_i2.NullableStringFieldUpdateOperationsInput,
+          _i1.PrismaNull>>? imageUrl;
 
   final _i1.PrismaUnion<String, _i2.StringFieldUpdateOperationsInput>? password;
 
@@ -3986,6 +4124,7 @@ class UserUncheckedUpdateWithoutPostsInput
         'id': id,
         'email': email,
         'name': name,
+        'imageUrl': imageUrl,
         'password': password,
         'role': role,
         'createdAt': createdAt,

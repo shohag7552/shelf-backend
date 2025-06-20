@@ -12,8 +12,6 @@ import '../../routes/profile_route.dart';
 /// Creates and configures the main application router.
 Router createRouter() {
   final router = Router();
-  final protectedRouter = Router(); // Routes that require authentication
-
   // // Mount your API routes
   // router.mount('/api/v1/', getUsersRouter().call);
   // router.mount('/api/v1/', getPostsRouter().call);

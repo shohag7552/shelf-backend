@@ -1,14 +1,14 @@
 // lib/routes/posts_route.dart
 import 'dart:convert';
-import 'dart:io'; // Required for File operations for image cleanup
+import 'dart:io';
+
 import 'package:my_shelf_mysql_app/helper/client_helper.dart';
 import 'package:my_shelf_mysql_app/helper/project_helper.dart';
 import 'package:my_shelf_mysql_app/src/generated_prisma_client/prisma.dart';
 import 'package:orm/orm.dart';
 import 'package:shelf/shelf.dart';
-import 'package:shelf_multipart/shelf_multipart.dart';
 import 'package:shelf_router/shelf_router.dart';
-import 'package:path/path.dart' as p; // Required for path manipulation
+import 'package:path/path.dart' as p;
 
 
 /// Returns a Router that handles CRUD operations for Posts.
@@ -55,180 +55,46 @@ Future<Response> _getAllPosts(Request request) async {
     // Optional: Include author details if query parameter 'includeAuthor' is 'true'
     final includeAuthor = request.url.queryParameters['includeAuthor'] == 'true';
     final userId = request.url.queryParameters['user_id'];
+    final limit = int.tryParse(request.url.queryParameters['limit'] ?? '10') ?? 10;
+    final offset = int.tryParse(request.url.queryParameters['offset'] ?? '0') ?? 0;
+    final skip = (offset - 1) * limit;
 
     final posts = await prisma.post.findMany(
-      where: userId != null ? PostWhereInput(authorId: PrismaUnion.$2(int.parse(userId))) : null,
+      where: userId != null
+          ? PostWhereInput(authorId: PrismaUnion.$2(int.parse(userId)))
+          : null,
       include: includeAuthor ? PostInclude(author: PrismaUnion.$1(true)) : null,
+      take: limit,
+      skip: skip,
+      orderBy: PrismaUnion.$2(PostOrderByWithRelationInput(createdAt: SortOrder.asc)),
     );
 
-    print('Posts: Retrieved ${posts.length} posts.');
+    final ids = await prisma.post.findMany(
+      where: userId != null
+          ? PostWhereInput(authorId: PrismaUnion.$2(int.parse(userId)))
+          : null,
+      select: PostSelect(id: true),
+    );
+    final totalCount = ids.length;
+
     return Response.ok(
-      jsonEncode(posts.map((p) => p.toJson()).toList()),
+      jsonEncode({
+        'meta': {
+          'limit': limit,
+          'offset': offset,
+          'count': posts.length,
+          'total': totalCount,
+        },
+        'data': posts.map((p) => p.toJson()).toList()
+      }),
       headers: {'Content-Type': 'application/json'},
     );
+
   } catch (e, stackTrace) {
     print('Posts: Error fetching all posts: $e');
     print('Posts: Stack trace: $stackTrace');
     return Response.internalServerError(body: jsonEncode({'error': 'Failed to fetch posts'}));
   }
-}
-
-Future<Response> _createPost(Request request) async {
-  final prisma = getPrismaClient(request);
-  // If this router is mounted under `authenticateUser()`, you can get the user like this:
-  // final authenticatedUser = getAuthenticatedUser(request);
-  // print('Posts: User ${authenticatedUser.email} is creating a post.');
-  String title;
-  String? content;
-  bool published;
-  int authorId;
-  String? imageUrl;
-
-  try {
-    final Map<String, dynamic> formData = {}; // Use dynamic for potential file parts or other types
-
-    // Check if the request is multipart/form-data
-    if (request.formData() case var form?) {
-      await for (final data in form.formData) {
-        // print('==xx=> ${data.name}: ${await data.part.readString()}');
-        formData[data.name] = await data.part.readString();
-        // var key = data.name;
-        // var value = await data.part.readString();
-        // print('======key: $key, value: $value');
-        // formData.addAll({
-        //   data.name: await data.part.readString(),
-        // });
-      }
-
-      print('====body is : ${formData}');
-      // return Response(500);
-      title = formData['title'] as String;
-      content = formData['content'] as String?;
-      published = formData['published'] == 'true' ? true : (formData['published'] == 'false' ? false : false);
-      // imageUrl = formData['imageUrl'] as String?;
-      authorId = formData['authorId'] as int;
-      // return Response.ok('success');
-    }
-
-    /*if (request.isMultipart) {
-      print('--> [PostsRoute] Handling multipart/form-data request.');
-
-      await for (final part in request.parts) {
-        if (part is FieldPart) {
-          // This is a regular text field (e.g., title, content, published, authorId, imageUrl)
-          formData[part.name] = await part.readString();
-          print('--> [PostsRoute] Form Data Field: ${part.name} = ${formData[part.name]}');
-        }
-        // If you were uploading a file alongside other fields in the same form-data request,
-        // you would handle `part is FilePart` here, similar to your /upload route.
-        // For now, assuming imageUrl is just a string URL.
-      }
-
-      // Extract fields from the parsed formData Map
-      // Basic validation and type conversion
-      title = formData['title'] as String? ?? (throw Exception('Title is required'));
-      content = formData['content'] as String?; // Nullable
-      published = formData['published'] == 'true'; // Convert 'true'/'false' string to bool
-      authorId = int.tryParse(formData['authorId'] as String? ?? '') ?? (throw Exception('Author ID is required and must be an integer'));
-      imageUrl = formData['imageUrl'] as String?; // Nullable
-
-    } */ else if (request.headers[HttpHeaders.contentTypeHeader]?.contains('application/json') ?? false) {
-      // Handle application/json (your existing working logic)
-      print('--> [PostsRoute] Handling application/json request.');
-      final String requestBody = await request.readAsString();
-      final Map<String, dynamic> data = jsonDecode(requestBody);
-      print('--> [PostsRoute] JSON Data: $data');
-
-      title = data['title'] as String;
-      content = data['content'] as String?;
-      published = data['published'] as bool;
-      authorId = data['authorId'] as int;
-      imageUrl = data['imageUrl'] as String?;
-
-    } else {
-      // If content type is neither multipart nor JSON
-      print('--- [PostsRoute] Error: Unsupported Content-Type. ---');
-      return Response.badRequest(body: jsonEncode({'error': 'Unsupported Content-Type. Use application/json or multipart/form-data.'}));
-    }
-
-    // Create the post using Prisma
-    final newPost = await prisma.post.create(
-      data: PrismaUnion.$1(PostCreateInput(
-        title: title,
-        content: PrismaUnion.$1(content??''),
-        published: published,
-        imageUrl: PrismaUnion.$1(imageUrl??''), // Store the image URL/path
-        author: UserCreateNestedOneWithoutPostsInput(
-          // Connect to the existing user by authorId
-          connect: UserWhereUniqueInput(id: authorId),
-        ),
-        // author: UserRelationInput.connect(
-        //   UserWhereUniqueInput(id: authorId),
-        // ),
-      )),
-    );
-
-    print('--> [PostsRoute] Post created successfully: ${newPost.id}');
-    return Response.ok(
-      jsonEncode(newPost.toJson()),
-      headers: {'Content-Type': 'application/json'},
-    );
-  } catch (e, st) {
-    print('--- [PostsRoute] Error creating post: $e ---');
-    print('--- [PostsRoute] Stack trace: $st ---');
-    return Response.internalServerError(body: jsonEncode({'error': 'Failed to create post', 'details': e.toString()}));
-  }
-
-  try {
-    final body = await request.readAsString();
-    final Map<String, dynamic> data = jsonDecode(body) as Map<String, dynamic>;
-
-    // String? imageUrl = await ProjectHelper.uploadImage(request);
-
-    final title = data['title'] as String?;
-    final content = data['content'] as String?;
-    final published = data['published'] as bool? ?? false;
-    final authorId = data['authorId'] as int?; // Ensure authorId is provided
-    final imageUrl = data['imageUrl'] as String?; // Optional: URL to the uploaded image
-
-    if (title == null || title.isEmpty || authorId == null) {
-      return Response.badRequest(body: jsonEncode({'error': 'Title and authorId are required'}));
-    }
-
-    final newPost = await prisma.post.create(
-      data: PrismaUnion.$1(PostCreateInput(
-        title: title,
-        content: PrismaUnion.$1(content??''),
-        published: published,
-        imageUrl: PrismaUnion.$1(imageUrl??''), // Store the image URL/path
-        author: UserCreateNestedOneWithoutPostsInput(
-          // Connect to the existing user by authorId
-          connect: UserWhereUniqueInput(id: authorId),
-        ),
-        // author: UserRelationInput.connect(
-        //   UserWhereUniqueInput(id: authorId),
-        // ),
-      )),
-    );
-
-    print('Posts: Created new post with ID ${newPost.id}.');
-    return Response.ok(
-      // '${request.url.path}/${newPost.id}',
-      jsonEncode(newPost.toJson()),
-      headers: {'Content-Type': 'application/json'},
-    );
-  } on PrismaClientKnownRequestError catch (e) {
-    if (e.code == 'P2025' && e.message.contains('User')) {
-      return Response.badRequest(body: jsonEncode({'error': 'Author with provided ID not found'}));
-    }
-    print('Posts: Prisma error creating post: ${e.code} - ${e.message}');
-    return Response.internalServerError(body: jsonEncode({'error': 'Database error during post creation'}));
-  } catch (e, stackTrace) {
-    print('Posts: General error creating post: $e');
-    print('Posts: Stack trace: $stackTrace');
-    return Response.internalServerError(body: jsonEncode({'error': 'Failed to create post'}));
-  }
-
 }
 
 Future<Response> _getPostById(Request request, String id) async {
@@ -380,5 +246,113 @@ Future<Response> _deletePostById(Request request, String id) async {
     print('Posts: General error deleting post: $e');
     print('Posts: Stack trace: $stackTrace');
     return Response.internalServerError(body: jsonEncode({'error': 'Failed to delete post'}));
+  }
+}
+
+Future<Response> _createPost(Request request) async {
+  final prisma = getPrismaClient(request);
+  String title;
+  String? content;
+  bool published;
+  int authorId;
+  String? imageUrl;
+
+  try {
+    /*final contentType = request.headers[HttpHeaders.contentTypeHeader];
+
+    if (contentType != null && contentType.contains('application/json')) {
+      // Handle JSON request
+      print('==== [json]');
+      final String body = await request.readAsString();
+      final data = jsonDecode(body) as Map<String, dynamic>;
+
+      title = data['title'] ?? (throw Exception('Title is required'));
+      content = data['content'];
+      published = data['published'] ?? false;
+      authorId = data['authorId'] ?? (throw Exception('Author ID is required'));
+
+      imageUrl = data['imageUrl'];
+    } else if (contentType != null && contentType.contains('multipart/form-data')) {
+      // Handle multipart form data
+      print('==== [form-data]');
+      final boundary = contentType.split("boundary=").last;
+      final transformer = MimeMultipartTransformer(boundary);
+      final parts = transformer.bind(request.read());
+
+      final Map<String, String> formFields = {};
+      File? imageFile;
+
+      await for (final part in parts) {
+        final headers = part.headers;
+        final contentDisposition = headers['content-disposition'];
+        if (contentDisposition == null) continue;
+
+        final nameMatch = RegExp(r'name="([^"]+)"').firstMatch(contentDisposition);
+        final filenameMatch = RegExp(r'filename="([^"]+)"').firstMatch(contentDisposition);
+
+        final name = nameMatch?.group(1);
+        final filename = filenameMatch?.group(1);
+
+        final data = await part.fold<List<int>>([], (p, e) => p..addAll(e));
+
+        if (filename == null && name != null) {
+          formFields[name] = utf8.decode(data);
+        } else if (name == 'image' && filename != null) {
+          final uploadsDir = Directory('uploads');
+          if (!uploadsDir.existsSync()) uploadsDir.createSync();
+
+          final safeName = '${Uuid().v4()}_${filename.replaceAll(RegExp(r'[^a-zA-Z0-9_.-]'), '_')}';
+          final imagePath = p.join(uploadsDir.path, safeName);
+          final file = File(imagePath);
+          await file.writeAsBytes(data);
+          imageFile = file;
+        }
+      }
+
+      title = formFields['title'] ?? (throw Exception('Title is required'));
+      content = formFields['content'];
+      published = formFields['published'] == 'true';
+      authorId = int.tryParse(formFields['authorId'] ?? '') ?? (throw Exception('Invalid authorId'));
+
+      imageUrl = imageFile?.path;
+    } else {
+      return Response.badRequest(body: jsonEncode({
+        'error': 'Unsupported Content-Type. Use application/json or multipart/form-data.'
+      }));
+    }*/
+
+    (Map<String, dynamic>, String?) data = await ProjectHelper.generateDataWithMultipart(request);
+
+    Map<String, dynamic> fields = data.$1;
+    String? image = data.$2;
+
+    title = fields['title'] ?? (throw Exception('Title is required'));
+    content = fields['content'];
+    published = fields['published'] == 'true';
+    authorId = int.tryParse(fields['authorId'] ?? '') ?? (throw Exception('Invalid authorId'));
+
+    imageUrl = image ?? fields['imageUrl'];
+
+    final newPost = await prisma.post.create(
+      data: PrismaUnion.$1(PostCreateInput(
+        title: title,
+        content: PrismaUnion.$1(content ?? ''),
+        published: published,
+        imageUrl: PrismaUnion.$1(imageUrl ?? ''),
+        author: UserCreateNestedOneWithoutPostsInput(
+          connect: UserWhereUniqueInput(id: authorId),
+        ),
+      )),
+      include: PostInclude(author: PrismaUnion.$1(true)),
+    );
+
+    return Response.ok(jsonEncode(newPost.toJson()), headers: {
+      HttpHeaders.contentTypeHeader: ContentType.json.mimeType,
+    });
+  } catch (e, st) {
+    print('Error creating post: $e\n$st');
+    return Response.internalServerError(
+      body: jsonEncode({'error': 'Failed to create post', 'details': e.toString()}),
+    );
   }
 }

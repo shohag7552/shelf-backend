@@ -998,6 +998,21 @@ class PrismaClient extends _i1.BasePrismaClient<PrismaClient> {
             'isUpdatedAt': false,
           },
           {
+            'name': 'imageUrl',
+            'dbName': 'image_url',
+            'kind': 'scalar',
+            'isList': false,
+            'isRequired': false,
+            'isUnique': false,
+            'isId': false,
+            'isReadOnly': false,
+            'hasDefaultValue': false,
+            'type': 'String',
+            'nativeType': null,
+            'isGenerated': false,
+            'isUpdatedAt': false,
+          },
+          {
             'name': 'password',
             'kind': 'scalar',
             'isList': false,
@@ -1296,7 +1311,7 @@ class PrismaClient extends _i1.BasePrismaClient<PrismaClient> {
   @override
   get $engine => _engine ??= _i5.BinaryEngine(
         schema:
-            '// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = "dart run orm generate"\n  output   = "../lib/src/generated_prisma_client"\n}\n\ndatasource db {\n  provider = "mysql"\n  url      = env("DATABASE_URL") // Use environment variable for connection string\n}\n\nmodel User {\n  id        Int      @id @default(autoincrement())\n  email     String   @unique\n  name      String?\n  password  String // New: To store hashed password\n  role      String   @default("USER") // New: To define user roles (e.g., ADMIN, USER)\n  createdAt DateTime @default(now()) @map("created_at")\n  updatedAt DateTime @updatedAt @map("updated_at")\n\n  posts Post[]\n\n  @@map("users")\n}\n\nmodel Post {\n  id        Int      @id @default(autoincrement())\n  title     String\n  content   String?  @db.Text\n  published Boolean  @default(false)\n  imageUrl  String?  @map("image_url")\n  createdAt DateTime @default(now()) @map("created_at")\n  updatedAt DateTime @updatedAt @map("updated_at")\n\n  author   User @relation(fields: [authorId], references: [id])\n  authorId Int  @map("author_id")\n\n  @@map("posts")\n}\n',
+            '// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = "dart run orm generate"\n  output   = "../lib/src/generated_prisma_client"\n}\n\ndatasource db {\n  provider = "mysql"\n  url      = env("DATABASE_URL") // Use environment variable for connection string\n}\n\nmodel User {\n  id        Int      @id @default(autoincrement())\n  email     String   @unique\n  name      String?\n  imageUrl  String?  @map("image_url")\n  password  String // New: To store hashed password\n  role      String   @default("USER") // New: To define user roles (e.g., ADMIN, USER)\n  createdAt DateTime @default(now()) @map("created_at")\n  updatedAt DateTime @updatedAt @map("updated_at")\n\n  posts Post[]\n\n  @@map("users")\n}\n\nmodel Post {\n  id        Int      @id @default(autoincrement())\n  title     String\n  content   String?  @db.Text\n  published Boolean  @default(false)\n  imageUrl  String?  @map("image_url")\n  createdAt DateTime @default(now()) @map("created_at")\n  updatedAt DateTime @updatedAt @map("updated_at")\n\n  author   User @relation(fields: [authorId], references: [id])\n  authorId Int  @map("author_id")\n\n  @@map("posts")\n}\n',
         datasources: const {
           'db': _i1.Datasource(
             _i1.DatasourceType.url,

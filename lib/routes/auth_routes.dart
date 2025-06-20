@@ -1,12 +1,12 @@
 // lib/routes/auth_route.dart
 import 'dart:convert';
 import 'package:my_shelf_mysql_app/auth/auth_service.dart';
+import 'package:my_shelf_mysql_app/helper/project_helper.dart';
 import 'package:orm/orm.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 
 import '../helper/client_helper.dart';
-import '../src/generated_prisma_client/client.dart';
 import '../src/generated_prisma_client/model.dart';
 import '../src/generated_prisma_client/prisma.dart';
 
@@ -28,17 +28,23 @@ Future<Response> _registration(Request request) async {
   final AuthService authService = AuthService();
   print('Auth: Register attempt. > ${request.method}');
 
+  String? email;
+  String? name;
+  String? password;
+  String? imageUrl;
+
   try {
-    final body = await request.readAsString();
 
-    print('=====body : $body');
-    final Map<String, dynamic> data = jsonDecode(body) as Map<String, dynamic>;
+    /// You can add image, but make sure you added only image field. other wise image not taken.
+    (Map<String, dynamic>, String?) data = await ProjectHelper.generateDataWithMultipart(request);
 
-    final email = data['email'] as String?;
-    final password = data['password'] as String?;
-    final name = data['name'] as String?; // Optional
+    Map<String, dynamic> fields = data.$1;
+    String? image = data.$2;
 
-    print('====password: $password');
+    email = fields['email'] as String?;
+    password = fields['password'] as String?;
+    name = fields['name'] as String?; // Optional
+    imageUrl = image ?? fields['imageUrl'];
 
     if (email == null || password == null || email.isEmpty || password.isEmpty) {
       return Response.badRequest(body: jsonEncode({'error': 'Email and password are required'}));
@@ -57,18 +63,19 @@ Future<Response> _registration(Request request) async {
         email: email,
         password: hashedPassword,
         name: PrismaUnion.$1(name??''),
+        imageUrl: PrismaUnion.$1(imageUrl??''),
         role: 'USER', // Default role for new users
       )),
     );
 
     print('Auth: User ${newUser.email} registered successfully.');
     return Response.ok(
-      // '${request.url.path}/${newUser.id}',
        jsonEncode({
          'message': 'User registered successfully',
          'userId': newUser.id,
          'email': newUser.email,
          'url': '${request.url.path}/${newUser.id}',
+         'imageUrl': '${newUser.imageUrl}',
       }),
       headers: {'Content-Type': 'application/json'},
     );
@@ -92,12 +99,16 @@ Future<Response> _login(Request request) async {
   print('Auth: Login attempt.');
 
   try {
-    final body = await request.readAsString();
-    print('=====body : $body');
-    final Map<String, dynamic> data = jsonDecode(body);
+    // final body = await request.readAsString();
+    // print('=====body : $body');
+    // final Map<String, dynamic> data = jsonDecode(body);
 
-    final email = data['email'] as String?;
-    final password = data['password'] as String?;
+    (Map<String, dynamic>, String?) data = await ProjectHelper.generateDataWithMultipart(request);
+
+    Map<String, dynamic> fields = data.$1;
+
+    final email = fields['email'] as String?;
+    final password = fields['password'] as String?;
 
     if (email == null || password == null || email.isEmpty || password.isEmpty) {
       return Response.badRequest(body: jsonEncode({'error': 'Email and password are required'}));
@@ -113,7 +124,6 @@ Future<Response> _login(Request request) async {
       return Response.unauthorized(jsonEncode({'error': 'Invalid credentials'}));
     }
 
-    print('=====pass: $password == ${user.password}');
     // Verify password
     final bool passwordMatches = authService.verifyPassword(password, user.password!);
 
