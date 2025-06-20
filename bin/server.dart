@@ -1,15 +1,10 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:dotenv/dotenv.dart';
 import 'package:my_shelf_mysql_app/api/v1/api_routers.dart';
-import 'package:my_shelf_mysql_app/data_source/mysql_connection.dart';
-import 'package:my_shelf_mysql_app/middleware/auth_middleware.dart';
 import 'package:my_shelf_mysql_app/middleware/cors_header.dart';
 import 'package:my_shelf_mysql_app/middleware/db_middleware.dart';
-import 'package:my_shelf_mysql_app/routes/user_routes.dart';
 import 'package:my_shelf_mysql_app/src/generated_prisma_client/client.dart';
-// import 'package:mysql_client/mysql_client.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf/shelf_io.dart';
 import 'package:shelf_router/shelf_router.dart';

@@ -1,8 +1,6 @@
 import 'package:my_shelf_mysql_app/middleware/auth_middleware.dart';
 import 'package:my_shelf_mysql_app/routes/auth_routes.dart';
 import 'package:my_shelf_mysql_app/routes/post_routes.dart';
-import 'package:my_shelf_mysql_app/routes/upload_route.dart';
-import 'package:my_shelf_mysql_app/routes/user_routes.dart';
 import 'package:shelf/shelf.dart';
 import 'package:shelf_router/shelf_router.dart';
 import 'package:shelf_static/shelf_static.dart';
@@ -17,12 +15,8 @@ Router createRouter() {
   // router.mount('/api/v1/', getPostsRouter().call);
   //
   // Mount your user routes and post routes
-  router.mount('/api/v1/', getUserRouter().call);
   router.mount('/api/v1/auth', getAuthRouter().call);
   router.mount('/api/v1/', getPostsRouter().call);
-
-  // Mount your file upload route
-  router.mount('/api/v1/', getUploadRouter().call);
 
   // router.mount('', )
 

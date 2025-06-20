@@ -44,6 +44,13 @@ Run command for running your server:
 -e dart: only watch .dart files
 
 -r: restarts the process on change
+
+# Project can use **multipart** data
+user can upload there **images** with there required data field.
+Image will upload this project's **uploads** folder and can easily retrieve this images though url path.
+
+I use `**mime**` for multipart and for showing or getting **images** I use **`shelf_static`** packages.
+
 #
 # Setup Process
 
