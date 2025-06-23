@@ -24,6 +24,7 @@ This sample code handles HTTP GET requests to `/` and `/echo/<message>`
     │   ├── middleware/            # Shelf middleware
     │   │   └── prisma_middleware.dart
     │   └── routes/                # Your API routes
+    │       ├── auth_route.dart
     │       ├── users_route.dart
     │       └── posts_route.dart
     ├── bin/
