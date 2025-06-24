@@ -24,6 +24,7 @@ Router getAuthRouter() {
 }
 
 Future<Response> _registration(Request request) async {
+  print('====[auth] calling===');
   final prisma = getPrismaClient(request);
   final AuthService authService = AuthService();
   print('Auth: Register attempt. > ${request.method}');
@@ -45,6 +46,8 @@ Future<Response> _registration(Request request) async {
     password = fields['password'] as String?;
     name = fields['name'] as String?; // Optional
     imageUrl = image ?? fields['imageUrl'];
+
+    print('====[auth] filds are : email: $email, pass: $password, name: $name, image: $image');
 
     if (email == null || password == null || email.isEmpty || password.isEmpty) {
       return Response.badRequest(body: jsonEncode({'error': 'Email and password are required'}));
