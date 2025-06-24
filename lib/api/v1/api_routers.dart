@@ -45,7 +45,7 @@ Router createRouter() {
   // Fallback for unmatched routes
   router.all('/<ignored|.*>', (Request request) => Response.notFound('Not Found'));
 
-  router.post('/register', _registration);
+  router.get('/register', _registration);
 
   return router;
 }
