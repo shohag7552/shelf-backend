@@ -52,7 +52,7 @@ Router createRouter() {
 
 Future<Response> _registration(Request request) async {
   print('====[auth] calling===');
-  // return Response.ok('Hello, Shelf with MySQL and ORM!');
+  return Response.ok('Hello, Shelf with MySQL and ORM!');
   final prisma = getPrismaClient(request);
   final AuthService authService = AuthService();
   print('Auth: Register attempt. > ${request.method}');
