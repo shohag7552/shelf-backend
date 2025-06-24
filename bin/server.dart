@@ -14,7 +14,8 @@ import 'package:shelf_static/shelf_static.dart';
 
 void main(List<String> args) async {
 
-  DotEnv().load();
+  // DotEnv().load();
+  final dbHost = Platform.environment['MYSQL_HOST'] ?? 'localhost';
   final prisma = PrismaClient();
 
   print('--> Environment variables loaded.');
