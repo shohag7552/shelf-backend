@@ -35,7 +35,9 @@ Router createRouter() {
           .addHandler(getProfileRouter().call)); // Then add the handler for profile routes
 
   // Add a simple root handler
-  router.post('/', _registration);
+  router.get('/', (Request request) {
+    return Response.ok('Hello, Shelf with MySQL and ORM!');
+  });
 
   // Health check endpoint
   router.get('/health', (Request request) => Response.ok('OK'));
@@ -43,14 +45,14 @@ Router createRouter() {
   // Fallback for unmatched routes
   router.all('/<ignored|.*>', (Request request) => Response.notFound('Not Found'));
 
-  router.get('/register', (Request request) => Response.ok('OK'));
+  router.post('/register', _registration);
 
   return router;
 }
 
 Future<Response> _registration(Request request) async {
   print('====[auth] calling===');
-  // return Response.ok('Hello, Shelf with MySQL and ORM!');
+  return Response.ok('Hello, Shelf with MySQL and ORM!');
   final prisma = getPrismaClient(request);
   final AuthService authService = AuthService();
   print('Auth: Register attempt. > ${request.method}');
