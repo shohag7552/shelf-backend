@@ -35,7 +35,7 @@ Router createRouter() {
           .addHandler(getProfileRouter().call)); // Then add the handler for profile routes
 
   // Add a simple root handler
-  router.get('/', _registration);
+  router.post('/', _registration);
 
   // Health check endpoint
   router.get('/health', (Request request) => Response.ok('OK'));
