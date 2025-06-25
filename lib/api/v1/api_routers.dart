@@ -35,9 +35,7 @@ Router createRouter() {
           .addHandler(getProfileRouter().call)); // Then add the handler for profile routes
 
   // Add a simple root handler
-  router.get('/', (Request request) {
-    return Response.ok('Hello, Shelf with MySQL and ORM!');
-  });
+  router.get('/', _registration);
 
   // Health check endpoint
   router.get('/health', (Request request) => Response.ok('OK'));
