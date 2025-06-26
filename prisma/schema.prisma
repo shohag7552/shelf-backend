@@ -8,8 +8,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://root:gJxJXAjxmjrnRhZoBflozOxwzKBCQMCY@mysql.railway.internal:3306/railway"
-  // url      = env("DATABASE_URL") // Use environment variable for connection string
+  url      = env("DATABASE_URL") // Use environment variable for connection string
 }
 
 model User {
