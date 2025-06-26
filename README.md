@@ -5,7 +5,7 @@ This sample code handles HTTP GET requests to `/` and `/echo/<message>`
 
 # Project Structure: 
     ```
-    my_shelf_orm_app/
+    my_shelf_mysql_app/
     ├── .env                       # Environment variables (DB_URL, PORT, etc.)
     ├── pubspec.yaml               # Project dependencies
     ├── prisma/                    # Prisma schema and migrations
@@ -46,6 +46,11 @@ Run command for running your server:
 -e dart: only watch .dart files
 
 -r: restarts the process on change
+
+# Or you can use `dart run` command to run the server: But It can't serve `hot restart` the server feature.
+```
+```dart run bin/server.dart
+```
 
 # Project can use **multipart** data
 user can upload there `images` with there required data field.
